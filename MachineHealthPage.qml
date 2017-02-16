@@ -4,12 +4,14 @@ import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Extras 1.4
+import QtCharts 2.0
 
 
 Item {
     width: 1200
     height: 900
     id: rootItem
+    Keys.enabled: true
 
 
     ColumnLayout {
@@ -28,13 +30,66 @@ Item {
 
             onMessageReceived: {
                 messageText.text = message;
-                var vals = message.split(",");
+                /*var vals = message.split(",");
                 var x = parseInt(vals[0].trim()) * 8.2;
                 var y = parseInt(vals[1].trim()) * 8.2;
                 fuelGauge.value = y;
+                xGauge.value = x*/
+                var x = parseFloat(message) * 25.3;
+                fuelGauge.value = x;
                 xGauge.value = x
 
-                console.log("got x: " + x + " and y: " + y);
+                //console.log("got x: " + x + " and y: " + y);
+
+            }
+        }
+        Item {
+            focus: true
+            Keys.onReleased: {
+                if(!event.isAutoRepeat){
+                    console.log("im in the keyreased handler");
+                    console.log("I received a key release from key " + event.key);
+                    if (event.key === Qt.Key_D) {
+                        ROSController.sendCommand("right-off");
+                    } else if (event.key === Qt.Key_A) {
+                        ROSController.sendCommand("left-off");
+                    } else if (event.key === Qt.Key_W) {
+                        ROSController.sendCommand("forward-off");
+                    } else if (event.key === Qt.Key_S) {
+                        ROSController.sendCommand("back-off");
+                    } else if (event.key === Qt.Key_Up) {
+                        ROSController.sendCommand("up-off");
+                    } else if (event.key === Qt.Key_Down) {
+                        ROSController.sendCommand("down-off");
+                    }
+                    event.accepted = true;
+
+                }
+
+            }
+
+            Keys.onPressed: {
+                if(!event.isAutoRepeat){
+                    console.log("im in the keypress handler");
+                    console.log("I received a key press from key " + event.key);
+                    if (event.key === Qt.Key_D) {
+                        ROSController.sendCommand("right-on");
+                    } else if (event.key === Qt.Key_A) {
+                        ROSController.sendCommand("left-on");
+                    } else if (event.key === Qt.Key_W) {
+                        ROSController.sendCommand("forward-on");
+                    } else if (event.key === Qt.Key_S) {
+                        ROSController.sendCommand("back-on");
+                    } else if (event.key === Qt.Key_Up) {
+                        ROSController.sendCommand("up-on");
+                    } else if (event.key === Qt.Key_Down) {
+                        ROSController.sendCommand("down-on");
+                    }
+                    event.accepted = true;
+
+                }
+
+
 
             }
         }
@@ -48,7 +103,9 @@ Item {
             width: 300
             height: 100
             radius: 10
-            gradient: Gradient {
+
+            color: "#009688"
+            /*gradient: Gradient {
                 GradientStop {
                     position: 0.0
                     color: "#ffffff"
@@ -57,7 +114,7 @@ Item {
                     position: 1.0
                     color: "grey"
                 }
-            }
+            }*/
 
             Label {
                 anchors.centerIn: parent
@@ -80,18 +137,14 @@ Item {
                 height: parent.height * 0.75
                 width: parent.width / 2
                 id: overallHealthRect
+
                 gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "#2c3e50"
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color: "grey"
-                    }
+                    GradientStop { position: 0.0; color: "#009688" }
+                    GradientStop { position: 1.0; color: "#004D40" }
                 }
 
                 RowLayout {
+                    id:gaugeLayout
                     anchors.centerIn: parent
                     Gauge {
                         minimumValue: 0
@@ -130,12 +183,14 @@ Item {
                         }
                     }
 
+
+
                 }
 
 
                 Label {
                     anchors.topMargin: 20
-                    anchors.top: fuelGauge.bottom
+                    anchors.top: gaugeLayout.bottom
                     width: 100
                     height: 50
                     id: messageText
@@ -151,15 +206,10 @@ Item {
                 height: parent.height * 0.75
                 width: parent.width / 2
                 id:plHealthBtnRect
+
                 gradient: Gradient {
-                    GradientStop {
-                        position: 0.0
-                        color: "#2c3e50"
-                    }
-                    GradientStop {
-                        position: 1.0
-                        color: "grey"
-                    }
+                    GradientStop { position: 0.0; color: "#009688" }
+                    GradientStop { position: 1.0; color: "#004D40" }
                 }
 
                 ColumnLayout {
@@ -179,9 +229,9 @@ Item {
                         anchors.horizontalCenter: parent.horizontalCenter
                         onClicked: {
 
-                                console.log("User clicked the Payload 1's button");
-                                var component = Qt.createComponent("PayloadHealth.qml");
-                                var plhView = component.createObject(rootLayout, {"x": 600, "y": 400});
+                            console.log("User clicked the Payload 1's button");
+                            var component = Qt.createComponent("PayloadHealth.qml");
+                            var plhView = component.createObject(rootLayout, {"x": 600, "y": 400});
                         }
                     }
 
@@ -210,6 +260,11 @@ Item {
                         text: qsTr("Payload 3 Health")
                         font.pointSize: 10
                         anchors.horizontalCenter: parent.horizontalCenter
+                        onClicked: {
+                            console.log("User clicked the Payload 3's button");
+
+                            ROSController.runGraph();
+                        }
                     }
 
                 }

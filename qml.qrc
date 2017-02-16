@@ -5,8 +5,8 @@
         <file>MappingPage.qml</file>
         <file>CommandPage.qml</file>
         <file>MachineHealthPage.qml</file>
+        <file>PayloadControls.qml</file>
         <file>PayloadHealth.qml</file>
         <file>TargetTracking.qml</file>
-        <file>PayloadControls.qml</file>
     </qresource>
 </RCC>
