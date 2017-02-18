@@ -69,7 +69,7 @@ mv qml-cvcamera-master qml-cvcamera
 cd qml-cvcamera
 mkdir build-desktop
 cd build-desktop
-$HOME_PATH/Qt/5.7/gcc_64/bin/qmake ..
+$HOME_PATH/Qt/5.8/gcc_64/bin/qmake ..
 make -j 5
 sudo make install
 
@@ -117,7 +117,7 @@ if [ -f UASGroundSystem/Makefile ]
 		rm UASGroundSystem/Makefile 
 fi
 
-$HOME/Qt/5.7/gcc_64/bin/qmake
+$HOME/Qt/5.8/gcc_64/bin/qmake
 make
 cd ..
 

@@ -55,7 +55,7 @@ cd ..
 cd graph/
 make clean
 
-$HOME/Qt/5.7/gcc_64/bin/qmake
+$HOME/Qt/5.8/gcc_64/bin/qmake
 make
 cd ..
 
