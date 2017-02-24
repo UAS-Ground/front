@@ -2,11 +2,9 @@
     <qresource prefix="/">
         <file>main.qml</file>
         <file>qtquickcontrols2.conf</file>
-        <file>MappingPage.qml</file>
         <file>CommandPage.qml</file>
+        <file>DroneViewPage.qml</file>
+        <file>SensorDataPage.qml</file>
         <file>MachineHealthPage.qml</file>
-        <file>PayloadControls.qml</file>
-        <file>PayloadHealth.qml</file>
-        <file>TargetTracking.qml</file>
     </qresource>
 </RCC>

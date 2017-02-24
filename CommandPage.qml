@@ -1,88 +1,29 @@
-import QtQuick 2.7
+import QtQuick 2.6
+import QtQuick.Controls 1.4
 import QtQuick.Controls 2.0
 import QtQuick.Layouts 1.0
 import QtQuick.Dialogs 1.2
 import QtPositioning 5.5
 import QtLocation 5.6
+import QtQuick.Window 2.0
 
 Item {
     width: 1200
     height: 900
     property alias label: label
-    id:rootItem
+    id:commandPage
     Keys.enabled: true
+    visible: true
 
-
-
+    property int dronex: 0
+    property int droney: 0
+    property int dronez: 0
 
 
     ColumnLayout{
         id:rootLayout
         width: 1200
         anchors.fill: parent
-
-        Connections {
-            target: ROSController
-
-
-            onMessageReceived: {
-                messageText.text = message
-
-
-            }
-        }
-
-
-        Item {
-            focus: true
-            Keys.onReleased: {
-                if(!event.isAutoRepeat){
-                    console.log("im in the keyreased handler");
-                    console.log("I received a key release from key " + event.key);
-                    if (event.key === Qt.Key_D) {
-                        ROSController.sendCommand("right-off");
-                    } else if (event.key === Qt.Key_A) {
-                        ROSController.sendCommand("left-off");
-                    } else if (event.key === Qt.Key_W) {
-                        ROSController.sendCommand("forward-off");
-                    } else if (event.key === Qt.Key_S) {
-                        ROSController.sendCommand("back-off");
-                    } else if (event.key === Qt.Key_Up) {
-                        ROSController.sendCommand("up-off");
-                    } else if (event.key === Qt.Key_Down) {
-                        ROSController.sendCommand("down-off");
-                    }
-                    event.accepted = true;
-
-                }
-
-            }
-
-            Keys.onPressed: {
-                if(!event.isAutoRepeat){
-                    console.log("im in the keypress handler");
-                    console.log("I received a key press from key " + event.key);
-                    if (event.key === Qt.Key_D) {
-                        ROSController.sendCommand("right-on");
-                    } else if (event.key === Qt.Key_A) {
-                        ROSController.sendCommand("left-on");
-                    } else if (event.key === Qt.Key_W) {
-                        ROSController.sendCommand("forward-on");
-                    } else if (event.key === Qt.Key_S) {
-                        ROSController.sendCommand("back-on");
-                    } else if (event.key === Qt.Key_Up) {
-                        ROSController.sendCommand("up-on");
-                    } else if (event.key === Qt.Key_Down) {
-                        ROSController.sendCommand("down-on");
-                    }
-                    event.accepted = true;
-
-                }
-
-
-
-            }
-        }
 
         Rectangle {
             id:titleRect
@@ -93,185 +34,207 @@ Item {
             width: 300
             height: 100
             radius: 10
-            /*gradient: Gradient {
-                GradientStop { position: 0.0; color: "#009688" }
-                GradientStop { position: 1.0; color: "#004D40" }
-            }*/
-            color: "#009688"
+            //color: "#00695C"
+            color: "#004D40"
 
+            /*
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "black" }
+                GradientStop { position: 1.0; color: "grey" }
+            } */
 
             Label {
                 anchors.centerIn: parent
                 id: label
-                text: qsTr("Commands")
+                text: qsTr("COMMAND")
                 font.pointSize: 28
+                //color: "#64FFDA"
                 color: "white"
 
             }
 
+        }
+
+        Rectangle {
+
+            id: optionsRect
+            anchors.top: titleRect.bottom
+            anchors.topMargin: 40
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.left: parent.left
+            anchors.leftMargin: 50
+
+            radius: 10
+            width: parent.width * 0.7
+            height: parent.height*0.75
+            /*
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "grey" }
+                GradientStop { position: 1.0; color: "black" }
+            } */
+            color: "#009688"
+
+            StackView {
+                id: commandStack
+                anchors.fill: parent
+                width: parent.width
+                height: parent.height
+                initialItem: defaultpane
+
+
+                Item {
+                    id: defaultpane
+                    Label {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.verticalCenter: parent.verticalCenter
+                        text: qsTr("Select an option")
+                        color: "#00695C"
+                        font.pixelSize: 40
+
+                    }
+                }
+
+
+                Component {
+                    id: homepane
+                    Item {
+                        Button {
+                            text: qsTr("Back")
+                            anchors.top: parent.top
+                            anchors.topMargin: 20
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
+                            width: 120
+                            height: 37
+                            font.pixelSize: 15
+                            onClicked: commandStack.pop()
+                        }
+
+
+                        Rectangle  {
+                            id: mapblock
+                            width: parent.width * 0.8
+                            height: parent.height * 0.6
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: parent.top
+                            anchors.topMargin: 75
+
+                            color: "#004D40"
+                           MouseArea {
+                              anchors.fill: parent
+                           }
+                        }
+
+                        Text {
+                            id: cmdlabel
+                            text: qsTr("CURRENT HOME POINT: [X , X , X]\nClick map to set new home point")
+                            color: "white"
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            font.pixelSize: 17
+                            anchors.top: mapblock.bottom
+                            anchors.topMargin: 20
+                        }
+
+                        Button {
+                            text: qsTr("Confirm Home Point")
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.top: cmdlabel.bottom
+                            anchors.topMargin: 10
+                            width: 150
+                            height: 50
+                            font.pixelSize: 13
+                        }
+                    }
+                }
+
+
+            }
+
+
+
+            Label {
+                id: coords
+                font.pixelSize: 20
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 40
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: qsTr("CURRENT POSITION: (" + dronex + ", " + droney + ", " + dronez + ")")
+                color: "white"
+
+            }
+
+            Label {
+                //focus: true
+                id: vel
+                font.pixelSize: 20
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 15
+                anchors.horizontalCenter: parent.horizontalCenter
+
+                text: qsTr("CURRENT VELOCITY: 0")
+                color: "white"
+
+            }
 
         }
+
 
         Rectangle {
             id:commandButtonsRect
             anchors.top: titleRect.bottom
             anchors.topMargin: 40
-            anchors.horizontalCenter: parent.horizontalCenter
+            //anchors.horizontalCenter: parent.horizontalCenter
+            anchors.right: parent.right
+            anchors.rightMargin: 50
             radius: 10
-            width: parent.width
+            width: parent.width * 0.7
             height: parent.height*0.75
+            /*
             gradient: Gradient {
-                GradientStop { position: 0.0; color: "#009688" }
-                GradientStop { position: 1.0; color: "#004D40" }
+                GradientStop { position: 0.0; color: "black" }
+                GradientStop { position: 1.0; color: "grey" }
             }
-
-
-
-
-            ColumnLayout {
-                anchors.top: commandButtonsRect.top
-                anchors.topMargin: 20
-                anchors.horizontalCenter: parent.horizontalCenter
-
-
+            */
+            color: "#004D40"
                 Button {
-                    anchors.topMargin: 20
-                    width: 100
-                    height: 50
                     id: gohome
                     text: qsTr("Return Home")
-                    font.pointSize: 10
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: parent.top
+                    anchors.topMargin: 25
+                    width: 240
+                    height: 75
+                    font.pixelSize: 20
+                    onClicked: commandStack.push(homepane)
+
+
                 }
 
                 Button {
-                    anchors.topMargin: 20
-                    width: 100
-                    height: 50
-                    id: targetTrackingBtn
-                    text: qsTr("Target Tracking")
-                    font.pointSize: 10
-                    onClicked: {
-                        console.log("User clicked the target-tracking button");
-                        var component = Qt.createComponent("TargetTracking.qml");
-                        var ttView = component.createObject(rootLayout, {"x": 600, "y": 400});
-
-
-                    }
+                    id: targetTracking
+                    text: qsTr("Option 2")
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: gohome.bottom
+                    anchors.topMargin: 20
+                    width: 240
+                    height: 75
+                    font.pixelSize: 20
                 }
 
                 Button {
-                    anchors.topMargin: 20
-                    width: 100
-                    height: 50
-                    id: payloadControlBtn
-                    onClicked: {
-                        console.log("User clicked the payload controls button");
-                        var component = Qt.createComponent("PayloadControls.qml");
-                        var pcView = component.createObject(rootLayout, {"x": 600, "y": 400});
-
-                    }
-                    text: qsTr("Payload Control")
-                    font.pointSize: 10
+                    text: qsTr("Option 3")
                     anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.top: targetTracking.bottom
+                    anchors.topMargin: 15
+                    width: 240
+                    height: 75
+                    font.pixelSize: 20
                 }
 
-                Label {
-                    anchors.topMargin: 20
-                    width: 100
-                    height: 50
-                    id: messageText
-                    text: qsTr("No messages yet")
-                    font.pointSize: 10
-                    color: "yellow"
-                    anchors.horizontalCenter: parent.horizontalCenter
-                }
-
-                Rectangle {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: messageText.bottom
-                    anchors.topMargin: 30
-                    id: commandRect
-                    height: 400
-                    width: 400
-                    color: "green"
-/*
-                    Button {
-                        anchors.top: parent.top
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: qsTr("Up")
-
-                        onClicked: {
-
-                            ROSController.sendCommand("(4.763f,5.3675f)");
-
-                        }
-                    }
-
-                    Button {
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Left")
-
-                    }
-                    Button {
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Right")
-
-                    }
-
-                    Button {
-                        anchors.bottom: parent.bottom
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        text: qsTr("Down")
-
-                    }
-*/
-
-                    MouseArea {
-                        anchors.fill: parent
-                        onClicked: {
-                            var my_x = mouse.x * 0.025;
-                            var my_y = 10.0 - (mouse.y * 0.025);
-                            testLbl.text = qsTr("x: " + my_x + ", y:"+my_y);
-                            ROSController.sendCommand("("+my_x+","+my_y+",3.82342)");
-                        }
-                    }
-                }
-                Label {
-                    anchors.top: commandRect.bottom
-                    color: "yellow"
-                    id:testLbl
-                    text: "no coords yet"
-                }
-
-            }
-            Button {
-                anchors.bottom: commandButtonsRect.bottom
-                id: getMessageButton
-                text: qsTr("Send Command")
-                onClicked: {
-
-                    ROSController.getMessage();
-
-                }
-                anchors.horizontalCenter: parent.horizontalCenter
-                anchors.bottomMargin: 20
             }
 
         }
 
-
-
-
     }
 
-
-
-
-
-
-
-}
