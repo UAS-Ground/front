@@ -1,0 +1,23 @@
+
+syntax = "proto3";
+package uavccsds;
+
+
+message PositionReport {
+  float x = 1;
+  float y = 2;
+  float z = 3;
+
+  float latitude = 4;
+  float longitude = 5;
+  float altitude = 6;
+
+  float pitch = 7;
+  float yaw = 8;
+  float roll = 9;
+
+  enum PositionDimension {
+    TWO = 0;
+    THREE = 1;
+  }
+}

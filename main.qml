@@ -5,8 +5,8 @@ import QtQuick.Window 2.0
 
 Item {
     visible: true
-    width: 1200
-    height: 900
+    width: Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight
 
 
      Rectangle {

@@ -8,8 +8,8 @@ import QtLocation 5.6
 import QtQuick.Window 2.0
 
 Item {
-    width: 1200
-    height: 900
+    width: Screen.desktopAvailableWidth
+    height: Screen.desktopAvailableHeight
     property alias label: label
     id:commandPage
     Keys.enabled: true
