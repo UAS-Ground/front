@@ -16,11 +16,11 @@ Item {
     id:droneViewPage
     readonly property int itemWidth: Math.max(brightnessSlider.implicitWidth, Math.min(brightnessSlider.implicitWidth * 2, droneViewPage.availableWidth / 3))
 
-
+/*
     Connections {
         target: CVController
     }
-
+*/
     Timer {
         id: printTimer
         interval: 500; running: true; repeat: true

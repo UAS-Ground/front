@@ -5,7 +5,7 @@
 #include <QUdpSocket>
 #include <QTcpSocket>
 #include <QNetworkSession>
-#include <ros/ros.h>
+//#include <ros/ros.h>
 //#include <ros/ros.h>
 //#include <ros/roscpp_serialization_macros.h>
 //#include <turtlesim/Pose.h>

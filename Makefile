@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_DEPRECATED_WARNINGS -DQT_NO_DEBUG -DQT_CHARTS_LIB -DQT_WIDGETS_LIB -DQT_QUICK_LIB -DQT_MULTIMEDIA_LIB -DQT_GUI_LIB -DQT_QML_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB -D_REENTRANT
 CFLAGS        = -pipe -O2 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -O2 -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I. -I../../OpenCV/modules/core/include -I../../OpenCV/modules/highgui/include -I../../OpenCV/modules/objdetect/include -I/opt/ros/kinetic/include -I../../Qt/5.8/gcc_64/include -I../../Qt/5.8/gcc_64/include/QtCharts -I../../Qt/5.8/gcc_64/include/QtWidgets -I../../Qt/5.8/gcc_64/include/QtQuick -I../../Qt/5.8/gcc_64/include/QtMultimedia -I../../Qt/5.8/gcc_64/include/QtGui -I../../Qt/5.8/gcc_64/include/QtQml -I../../Qt/5.8/gcc_64/include/QtNetwork -I../../Qt/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -isystem /usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I../../Qt/5.8/gcc_64/mkspecs/linux-g++
+INCPATH       = -I. -I../../Qt/5.8/gcc_64/include -I../../Qt/5.8/gcc_64/include/QtCharts -I../../Qt/5.8/gcc_64/include/QtWidgets -I../../Qt/5.8/gcc_64/include/QtQuick -I../../Qt/5.8/gcc_64/include/QtMultimedia -I../../Qt/5.8/gcc_64/include/QtGui -I../../Qt/5.8/gcc_64/include/QtQml -I../../Qt/5.8/gcc_64/include/QtNetwork -I../../Qt/5.8/gcc_64/include/QtCore -I. -isystem /usr/include/libdrm -isystem /usr/include/glib-2.0 -I/usr/lib64/glib-2.0/include -I../../Qt/5.8/gcc_64/mkspecs/linux-g++
 QMAKE         = /home/tyler/Qt/5.8/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -36,7 +36,7 @@ DISTNAME      = UIMockup11.0.0
 DISTDIR = /home/tyler/NEW_UAV/front/.tmp/UIMockup11.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/tyler/Qt/5.8/gcc_64/lib
-LIBS          = $(SUBLIBS) -L/home/tyler/OpenCV/build/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_objdetect -L/home/tyler/Qt/5.8/gcc_64/lib -lQt5Charts -lQt5Widgets -lQt5Quick -lQt5Multimedia -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread -lpulse-mainloop-glib -lpulse -lglib-2.0 
+LIBS          = $(SUBLIBS) -L/home/tyler/Qt/5.8/gcc_64/lib -lQt5Charts -lQt5Widgets -lQt5Quick -lQt5Multimedia -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread -lpulse-mainloop-glib -lpulse -lglib-2.0 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -49,19 +49,15 @@ OBJECTS_DIR   = ./
 ####### Files
 
 SOURCES       = main.cpp \
-		cvcontroller.cpp \
 		ccsdspacket.cc \
 		roscontroller.cpp qrc_qml.cpp \
 		qrc_resources.cpp \
-		moc_cvcontroller.cpp \
 		moc_roscontroller.cpp
 OBJECTS       = main.o \
-		cvcontroller.o \
 		ccsdspacket.o \
 		roscontroller.o \
 		qrc_qml.o \
 		qrc_resources.o \
-		moc_cvcontroller.o \
 		moc_roscontroller.o
 DIST          = ../../Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/5.8/gcc_64/mkspecs/common/unix.conf \
@@ -232,10 +228,8 @@ DIST          = ../../Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../../Qt/5.8/gcc_64/mkspecs/features/exceptions.prf \
 		../../Qt/5.8/gcc_64/mkspecs/features/yacc.prf \
 		../../Qt/5.8/gcc_64/mkspecs/features/lex.prf \
-		UIMockup1.pro cvcontroller.h \
-		ccsdspacket.h \
+		UIMockup1.pro ccsdspacket.h \
 		roscontroller.h main.cpp \
-		cvcontroller.cpp \
 		ccsdspacket.cc \
 		roscontroller.cpp
 QMAKE_TARGET  = UIMockup1
@@ -626,8 +620,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents ../../Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents cvcontroller.h ccsdspacket.h roscontroller.h $(DISTDIR)/
-	$(COPY_FILE) --parents main.cpp cvcontroller.cpp ccsdspacket.cc roscontroller.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ccsdspacket.h roscontroller.h $(DISTDIR)/
+	$(COPY_FILE) --parents main.cpp ccsdspacket.cc roscontroller.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -674,90 +668,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: ../../Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++11 -Wall -W -dM -E -o moc_predefs.h ../../Qt/5.8/gcc_64/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_cvcontroller.cpp moc_roscontroller.cpp
+compiler_moc_header_make_all: moc_roscontroller.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_cvcontroller.cpp moc_roscontroller.cpp
-moc_cvcontroller.cpp: ../../Qt/5.8/gcc_64/include/QtCore/QObject \
-		../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../../OpenCV/modules/core/include/opencv2/core/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvdef.h \
-		../../OpenCV/modules/core/include/opencv2/core/hal/interface.h \
-		../../OpenCV/modules/core/include/opencv2/core/version.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/base.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ptr.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/neon_utils.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/traits.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/matx.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/saturate.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/fast_math.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/types.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/bufferpool.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/persistence.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/operations.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/utility.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/core_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/types_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/optim.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ovx.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui_c.h \
-		cvcontroller.h \
-		moc_predefs.h \
-		../../Qt/5.8/gcc_64/bin/moc
-	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/NEW_UAV/front -I/home/tyler/OpenCV/modules/core/include -I/home/tyler/OpenCV/modules/highgui/include -I/home/tyler/OpenCV/modules/objdetect/include -I/opt/ros/kinetic/include -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtCharts -I/home/tyler/Qt/5.8/gcc_64/include/QtWidgets -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include cvcontroller.h -o moc_cvcontroller.cpp
-
+	-$(DEL_FILE) moc_roscontroller.cpp
 moc_roscontroller.cpp: ../../Qt/5.8/gcc_64/include/QtCore/QObject \
 		../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
 		../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
@@ -832,65 +745,10 @@ moc_roscontroller.cpp: ../../Qt/5.8/gcc_64/include/QtCore/QObject \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
-		/opt/ros/kinetic/include/ros/ros.h \
-		/opt/ros/kinetic/include/ros/time.h \
-		/opt/ros/kinetic/include/ros/platform.h \
-		/opt/ros/kinetic/include/ros/exception.h \
-		/opt/ros/kinetic/include/ros/duration.h \
-		/opt/ros/kinetic/include/ros/rostime_decl.h \
-		/opt/ros/kinetic/include/ros/macros.h \
-		/opt/ros/kinetic/include/ros/rate.h \
-		/opt/ros/kinetic/include/ros/console.h \
-		/opt/ros/kinetic/include/ros/console_backend.h \
-		/opt/ros/kinetic/include/rosconsole/macros_generated.h \
-		/opt/ros/kinetic/include/ros/assert.h \
-		/opt/ros/kinetic/include/ros/static_assert.h \
-		/opt/ros/kinetic/include/ros/common.h \
-		/opt/ros/kinetic/include/ros/forwards.h \
-		/opt/ros/kinetic/include/ros/exceptions.h \
-		/opt/ros/kinetic/include/ros/datatypes.h \
-		/opt/ros/kinetic/include/ros/serialized_message.h \
-		/opt/ros/kinetic/include/ros/roscpp_serialization_macros.h \
-		/opt/ros/kinetic/include/ros/types.h \
-		/opt/ros/kinetic/include/ros/node_handle.h \
-		/opt/ros/kinetic/include/ros/publisher.h \
-		/opt/ros/kinetic/include/ros/message.h \
-		/opt/ros/kinetic/include/ros/serialization.h \
-		/opt/ros/kinetic/include/ros/message_traits.h \
-		/opt/ros/kinetic/include/ros/message_forward.h \
-		/opt/ros/kinetic/include/ros/builtin_message_traits.h \
-		/opt/ros/kinetic/include/ros/subscriber.h \
-		/opt/ros/kinetic/include/ros/subscription_callback_helper.h \
-		/opt/ros/kinetic/include/ros/parameter_adapter.h \
-		/opt/ros/kinetic/include/ros/message_event.h \
-		/opt/ros/kinetic/include/ros/service_server.h \
-		/opt/ros/kinetic/include/ros/service_client.h \
-		/opt/ros/kinetic/include/ros/service_traits.h \
-		/opt/ros/kinetic/include/ros/timer.h \
-		/opt/ros/kinetic/include/ros/timer_options.h \
-		/opt/ros/kinetic/include/ros/wall_timer.h \
-		/opt/ros/kinetic/include/ros/wall_timer_options.h \
-		/opt/ros/kinetic/include/ros/advertise_options.h \
-		/opt/ros/kinetic/include/ros/advertise_service_options.h \
-		/opt/ros/kinetic/include/ros/service_callback_helper.h \
-		/opt/ros/kinetic/include/ros/subscribe_options.h \
-		/opt/ros/kinetic/include/ros/transport_hints.h \
-		/opt/ros/kinetic/include/ros/service_client_options.h \
-		/opt/ros/kinetic/include/ros/spinner.h \
-		/opt/ros/kinetic/include/ros/init.h \
-		/opt/ros/kinetic/include/XmlRpcValue.h \
-		/opt/ros/kinetic/include/XmlRpcDecl.h \
-		/opt/ros/kinetic/include/ros/single_subscriber_publisher.h \
-		/opt/ros/kinetic/include/ros/service.h \
-		/opt/ros/kinetic/include/ros/names.h \
-		/opt/ros/kinetic/include/ros/master.h \
-		/opt/ros/kinetic/include/ros/this_node.h \
-		/opt/ros/kinetic/include/ros/param.h \
-		/opt/ros/kinetic/include/ros/topic.h \
 		roscontroller.h \
 		moc_predefs.h \
 		../../Qt/5.8/gcc_64/bin/moc
-	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/NEW_UAV/front -I/home/tyler/OpenCV/modules/core/include -I/home/tyler/OpenCV/modules/highgui/include -I/home/tyler/OpenCV/modules/objdetect/include -I/opt/ros/kinetic/include -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtCharts -I/home/tyler/Qt/5.8/gcc_64/include/QtWidgets -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include roscontroller.h -o moc_roscontroller.cpp
+	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/NEW_UAV/front -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtCharts -I/home/tyler/Qt/5.8/gcc_64/include/QtWidgets -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include roscontroller.h -o moc_roscontroller.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1064,130 +922,8 @@ main.o: main.cpp ../../Qt/5.8/gcc_64/include/QtWidgets/QApplication \
 		../../Qt/5.8/gcc_64/include/QtQml/qqmlapplicationengine.h \
 		../../Qt/5.8/gcc_64/include/QtQml/QQmlContext \
 		../../Qt/5.8/gcc_64/include/QtQml/qqmlcontext.h \
-		cvcontroller.h \
-		../../OpenCV/modules/core/include/opencv2/core/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvdef.h \
-		../../OpenCV/modules/core/include/opencv2/core/hal/interface.h \
-		../../OpenCV/modules/core/include/opencv2/core/version.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/base.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ptr.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/neon_utils.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/traits.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/matx.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/saturate.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/fast_math.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/types.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/bufferpool.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/persistence.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/operations.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/utility.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/core_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/types_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/optim.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ovx.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui_c.h
+		cvcontroller.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o main.cpp
-
-cvcontroller.o: cvcontroller.cpp cvcontroller.h \
-		../../Qt/5.8/gcc_64/include/QtCore/QObject \
-		../../Qt/5.8/gcc_64/include/QtCore/qobject.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qnamespace.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qglobal.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qconfig-bootstrapped.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qconfig.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtcore-config.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsystemdetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qprocessordetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcompilerdetection.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtypeinfo.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsysinfo.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qlogging.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qflags.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtypetraits.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbasicatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_bootstrap.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qgenericatomic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_cxx11.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qatomic_msvc.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qglobalstatic.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qmutex.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qnumeric.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qversiontagging.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobjectdefs_impl.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstring.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qchar.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbytearray.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qrefcount.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qarraydata.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringbuilder.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qlist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qalgorithms.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qiterator.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qhashfunctions.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qpair.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qbytearraylist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringlist.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qregexp.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qstringmatcher.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcoreevent.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qscopedpointer.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qmetatype.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qvarlengtharray.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcontainerfwd.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qobject_impl.h \
-		../../OpenCV/modules/core/include/opencv2/core/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvdef.h \
-		../../OpenCV/modules/core/include/opencv2/core/hal/interface.h \
-		../../OpenCV/modules/core/include/opencv2/core/version.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/base.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ptr.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/neon_utils.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/traits.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/matx.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/saturate.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/fast_math.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/types.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/bufferpool.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/mat.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/persistence.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/operations.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/cvstd.inl.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/utility.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/core_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/types_c.h \
-		../../OpenCV/modules/core/include/opencv2/core/optim.hpp \
-		../../OpenCV/modules/core/include/opencv2/core/ovx.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui.hpp \
-		../../OpenCV/modules/highgui/include/opencv2/highgui/highgui_c.h \
-		../../Qt/5.8/gcc_64/include/QtCore/QDebug \
-		../../Qt/5.8/gcc_64/include/QtCore/qdebug.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qhash.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qmap.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qtextstream.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qiodevice.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qlocale.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qvariant.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qshareddata.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qvector.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qpoint.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qset.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qcontiguouscache.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer.h \
-		../../Qt/5.8/gcc_64/include/QtCore/qsharedpointer_impl.h
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o cvcontroller.o cvcontroller.cpp
 
 ccsdspacket.o: ccsdspacket.cc ccsdspacket.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o ccsdspacket.o ccsdspacket.cc
@@ -1267,61 +1003,6 @@ roscontroller.o: roscontroller.cpp roscontroller.h \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworksession.h \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworkinterface.h \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qnetworkconfiguration.h \
-		/opt/ros/kinetic/include/ros/ros.h \
-		/opt/ros/kinetic/include/ros/time.h \
-		/opt/ros/kinetic/include/ros/platform.h \
-		/opt/ros/kinetic/include/ros/exception.h \
-		/opt/ros/kinetic/include/ros/duration.h \
-		/opt/ros/kinetic/include/ros/rostime_decl.h \
-		/opt/ros/kinetic/include/ros/macros.h \
-		/opt/ros/kinetic/include/ros/rate.h \
-		/opt/ros/kinetic/include/ros/console.h \
-		/opt/ros/kinetic/include/ros/console_backend.h \
-		/opt/ros/kinetic/include/rosconsole/macros_generated.h \
-		/opt/ros/kinetic/include/ros/assert.h \
-		/opt/ros/kinetic/include/ros/static_assert.h \
-		/opt/ros/kinetic/include/ros/common.h \
-		/opt/ros/kinetic/include/ros/forwards.h \
-		/opt/ros/kinetic/include/ros/exceptions.h \
-		/opt/ros/kinetic/include/ros/datatypes.h \
-		/opt/ros/kinetic/include/ros/serialized_message.h \
-		/opt/ros/kinetic/include/ros/roscpp_serialization_macros.h \
-		/opt/ros/kinetic/include/ros/types.h \
-		/opt/ros/kinetic/include/ros/node_handle.h \
-		/opt/ros/kinetic/include/ros/publisher.h \
-		/opt/ros/kinetic/include/ros/message.h \
-		/opt/ros/kinetic/include/ros/serialization.h \
-		/opt/ros/kinetic/include/ros/message_traits.h \
-		/opt/ros/kinetic/include/ros/message_forward.h \
-		/opt/ros/kinetic/include/ros/builtin_message_traits.h \
-		/opt/ros/kinetic/include/ros/subscriber.h \
-		/opt/ros/kinetic/include/ros/subscription_callback_helper.h \
-		/opt/ros/kinetic/include/ros/parameter_adapter.h \
-		/opt/ros/kinetic/include/ros/message_event.h \
-		/opt/ros/kinetic/include/ros/service_server.h \
-		/opt/ros/kinetic/include/ros/service_client.h \
-		/opt/ros/kinetic/include/ros/service_traits.h \
-		/opt/ros/kinetic/include/ros/timer.h \
-		/opt/ros/kinetic/include/ros/timer_options.h \
-		/opt/ros/kinetic/include/ros/wall_timer.h \
-		/opt/ros/kinetic/include/ros/wall_timer_options.h \
-		/opt/ros/kinetic/include/ros/advertise_options.h \
-		/opt/ros/kinetic/include/ros/advertise_service_options.h \
-		/opt/ros/kinetic/include/ros/service_callback_helper.h \
-		/opt/ros/kinetic/include/ros/subscribe_options.h \
-		/opt/ros/kinetic/include/ros/transport_hints.h \
-		/opt/ros/kinetic/include/ros/service_client_options.h \
-		/opt/ros/kinetic/include/ros/spinner.h \
-		/opt/ros/kinetic/include/ros/init.h \
-		/opt/ros/kinetic/include/XmlRpcValue.h \
-		/opt/ros/kinetic/include/XmlRpcDecl.h \
-		/opt/ros/kinetic/include/ros/single_subscriber_publisher.h \
-		/opt/ros/kinetic/include/ros/service.h \
-		/opt/ros/kinetic/include/ros/names.h \
-		/opt/ros/kinetic/include/ros/master.h \
-		/opt/ros/kinetic/include/ros/this_node.h \
-		/opt/ros/kinetic/include/ros/param.h \
-		/opt/ros/kinetic/include/ros/topic.h \
 		../../Qt/5.8/gcc_64/include/QtCore/QDebug \
 		../../Qt/5.8/gcc_64/include/QtNetwork/QHostInfo \
 		../../Qt/5.8/gcc_64/include/QtNetwork/qhostinfo.h \
@@ -1334,9 +1015,6 @@ qrc_qml.o: qrc_qml.cpp
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
-
-moc_cvcontroller.o: moc_cvcontroller.cpp 
-	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_cvcontroller.o moc_cvcontroller.cpp
 
 moc_roscontroller.o: moc_roscontroller.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_roscontroller.o moc_roscontroller.cpp

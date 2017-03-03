@@ -3,7 +3,7 @@ QT += widgets charts qml quick multimedia
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    cvcontroller.cpp \
+#    cvcontroller.cpp \
     ccsdspacket.cc \
     roscontroller.cpp
 
@@ -36,20 +36,20 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES +=
 
 
-OPENCV_PATH = /home/tyler/OpenCV
+# OPENCV_PATH = /home/tyler/OpenCV
 
-LIBS_PATH = /home/tyler/OpenCV/build/lib
+# LIBS_PATH = /home/tyler/OpenCV/build/lib
 
-LIBS     +=     -L$$LIBS_PATH     -lopencv_core     -lopencv_highgui     -lopencv_imgproc     -lopencv_videoio		-lopencv_objdetect
+# LIBS     +=     -L$$LIBS_PATH     -lopencv_core     -lopencv_highgui     -lopencv_imgproc     -lopencv_videoio		-lopencv_objdetect
 
 
-INCLUDEPATH +=     $$OPENCV_PATH/modules/core/include/ \ #core module
-    $$OPENCV_PATH/modules/highgui/include/ \ #highgui modul
-    $$OPENCV_PATH/modules/objdetect/include/ \ #objdetect modul
-    /opt/ros/kinetic/include/
+# INCLUDEPATH +=     $$OPENCV_PATH/modules/core/include/ \ #core module
+#    $$OPENCV_PATH/modules/highgui/include/ \ #highgui modul
+#    $$OPENCV_PATH/modules/objdetect/include/ \ #objdetect modul
+#    /opt/ros/kinetic/include/
 
 HEADERS += \
-    cvcontroller.h \
+#    cvcontroller.h \
     ccsdspacket.h \
     roscontroller.h
 

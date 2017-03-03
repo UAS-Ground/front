@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-#include "cvcontroller.h"
+//#include "cvcontroller.h"
 
 int main(int argc, char *argv[])
 {
@@ -38,8 +38,8 @@ int main(int argc, char *argv[])
     viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
                                       QString::fromLatin1("qml")));
 
-    CVController cvController;
-    viewer.engine()->rootContext()->setContextProperty("CVController", &cvController);
+  //  CVController cvController;
+  //  viewer.engine()->rootContext()->setContextProperty("CVController", &cvController);
 
     QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
 
