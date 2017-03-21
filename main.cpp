@@ -1,18 +1,3 @@
-/*
-#include <QGuiApplication>
-#include <QQmlApplicationEngine>
-
-int main(int argc, char *argv[])
-{
-    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
-    QGuiApplication app(argc, argv);
-
-    QQmlApplicationEngine engine;
-    engine.load(QUrl(QLatin1String("qrc:/main.qml")));
-
-    return app.exec();
-} */
-
 #include <QtWidgets/QApplication>
 #include <QtQuick/QQuickView>
 #include <QtCore/QDir>
@@ -20,10 +5,17 @@ int main(int argc, char *argv[])
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
-//#include "cvcontroller.h"
-
+#include <QScreen>
+#include <QQmlContext>
+#include <QSettings>
+#include <QQuickStyle>
+#include <QFontDatabase>
+#include <QDebug>
 int main(int argc, char *argv[])
 {
+
+    /*
+
     // Qt Charts uses Qt Graphics View Framework for drawing, therefore QApplication must be used.
     QApplication app(argc, argv);
 
@@ -32,23 +24,51 @@ int main(int argc, char *argv[])
     // in desktop environments.
 #ifdef Q_OS_WIN
     QString extraImportPath(QStringLiteral("%1/../../../../%2"));
-#else
+#elseSensors
     QString extraImportPath(QStringLiteral("%1/../../../%2"));
 #endif
     viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
                                       QString::fromLatin1("qml")));
 
-  //  CVController cvController;
-  //  viewer.engine()->rootContext()->setContextProperty("CVController", &cvController);
 
     QObject::connect(viewer.engine(), &QQmlEngine::quit, &viewer, &QWindow::close);
 
-    viewer.setTitle(QStringLiteral("QML Chart"));
+    viewer.setTitle(QStringLiteral("UAS Ground System"));
 
     viewer.setSource(QUrl("qrc:/main.qml"));
+    viewer.setGeometry(QGuiApplication::primaryScreen()->geometry());
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
-    viewer.showMaximized();
+    //viewer.showMaximized();
 
+    viewer.show();
+    return app.exec();
+    */
+
+
+    QGuiApplication::setApplicationName("UAS Ground System");
+    QGuiApplication::setOrganizationName("UASGS-CSULA");
+    QGuiApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QGuiApplication app(argc, argv);
+
+    QSettings settings;
+    QString style = QQuickStyle::name();
+    if (!style.isEmpty())
+        settings.setValue("style", style);
+    else
+        QQuickStyle::setStyle(settings.value("style").toString());
+    QFontDatabase fontDb;
+
+    QStringList fonts = fontDb.families();
+
+    for(int i = 0; i < fonts.size(); i++){
+        qDebug() << "Font " << i << ": " << fonts[i];
+    }
+
+    QQmlApplicationEngine engine;
+    engine.load(QUrl("qrc:/main.qml"));
+    if (engine.rootObjects().isEmpty())
+        return -1;
 
     return app.exec();
 }

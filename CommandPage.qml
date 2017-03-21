@@ -1,240 +1,458 @@
-import QtQuick 2.6
-import QtQuick.Controls 1.4
-import QtQuick.Controls 2.0
-import QtQuick.Layouts 1.0
-import QtQuick.Dialogs 1.2
-import QtPositioning 5.5
+import QtQuick 2.7
+import QtQuick.Controls 2.1
+import QtQuick.Controls.Styles 1.4
+import QtQuick.Layouts 1.1
+import QtPositioning 5.6
 import QtLocation 5.6
-import QtQuick.Window 2.0
+GroundSystemLayout {
+    id:rootLayout
+    myVar: "hello command var"
 
-Item {
-    width: Screen.desktopAvailableWidth
-    height: Screen.desktopAvailableHeight
-    property alias label: label
-    id:commandPage
-    Keys.enabled: true
-    visible: true
-
-    property int dronex: 0
-    property int droney: 0
-    property int dronez: 0
+    Plugin {
+        id: osmPlugin
+        name: "osm"
+    }
 
 
-    ColumnLayout{
-        id:rootLayout
-        width: 1200
-        anchors.fill: parent
 
-        Rectangle {
-            id:titleRect
-            anchors.topMargin: 20
-            anchors.bottomMargin: 20
-            anchors.top: parent.top
-            anchors.horizontalCenter: parent.horizontalCenter
-            width: 300
-            height: 100
-            radius: 10
-            //color: "#00695C"
-            color: "#004D40"
+    Dialog {
+        id: cancelMissionDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2
+        height: parent.height/ 2
+        parent: ApplicationWindow.overlay
 
-            /*
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "black" }
-                GradientStop { position: 1.0; color: "grey" }
-            } */
+        focus: true
+        modal: true
+        title: "Confirm Cancel Mission"
+        standardButtons: Dialog.Ok
+
+        contentItem: Rectangle {
+            color: "#303030"
+            implicitWidth: parent.width / 2
+            implicitHeight: parent.height/ 2
+
 
             Label {
+                id:selectColorLabel
+                text: qsTr("Are you sure you want to cancel the current mission?")
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
                 anchors.centerIn: parent
-                id: label
-                text: qsTr("COMMAND")
-                font.pointSize: 28
-                //color: "#64FFDA"
-                color: "white"
-
-            }
-
-        }
-
-        Rectangle {
-
-            id: optionsRect
-            anchors.top: titleRect.bottom
-            anchors.topMargin: 40
-            //anchors.horizontalCenter: parent.horizontalCenter
-            anchors.left: parent.left
-            anchors.leftMargin: 50
-
-            radius: 10
-            width: parent.width * 0.7
-            height: parent.height*0.75
-            /*
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "grey" }
-                GradientStop { position: 1.0; color: "black" }
-            } */
-            color: "#009688"
-
-            StackView {
-                id: commandStack
-                anchors.fill: parent
-                width: parent.width
-                height: parent.height
-                initialItem: defaultpane
-
-
-                Item {
-                    id: defaultpane
-                    Label {
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.verticalCenter: parent.verticalCenter
-                        text: qsTr("Select an option")
-                        color: "#00695C"
-                        font.pixelSize: 40
-
-                    }
-                }
-
-
-                Component {
-                    id: homepane
-                    Item {
-                        Button {
-                            text: qsTr("Back")
-                            anchors.top: parent.top
-                            anchors.topMargin: 20
-                            anchors.left: parent.left
-                            anchors.leftMargin: 20
-                            width: 120
-                            height: 37
-                            font.pixelSize: 15
-                            onClicked: commandStack.pop()
-                        }
-
-
-                        Rectangle  {
-                            id: mapblock
-                            width: parent.width * 0.8
-                            height: parent.height * 0.6
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: parent.top
-                            anchors.topMargin: 75
-
-                            color: "#004D40"
-                           MouseArea {
-                              anchors.fill: parent
-                           }
-                        }
-
-                        Text {
-                            id: cmdlabel
-                            text: qsTr("CURRENT HOME POINT: [X , X , X]\nClick map to set new home point")
-                            color: "white"
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            font.pixelSize: 17
-                            anchors.top: mapblock.bottom
-                            anchors.topMargin: 20
-                        }
-
-                        Button {
-                            text: qsTr("Confirm Home Point")
-                            anchors.horizontalCenter: parent.horizontalCenter
-                            anchors.top: cmdlabel.bottom
-                            anchors.topMargin: 10
-                            width: 150
-                            height: 50
-                            font.pixelSize: 13
-                        }
-                    }
-                }
-
-
-            }
-
-
-
-            Label {
-                id: coords
-                font.pixelSize: 20
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 40
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: qsTr("CURRENT POSITION: (" + dronex + ", " + droney + ", " + dronez + ")")
-                color: "white"
-
-            }
-
-            Label {
-                //focus: true
-                id: vel
-                font.pixelSize: 20
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 15
-                anchors.horizontalCenter: parent.horizontalCenter
-
-                text: qsTr("CURRENT VELOCITY: 0")
-                color: "white"
-
-            }
-
-        }
-
-
-        Rectangle {
-            id:commandButtonsRect
-            anchors.top: titleRect.bottom
-            anchors.topMargin: 40
-            //anchors.horizontalCenter: parent.horizontalCenter
-            anchors.right: parent.right
-            anchors.rightMargin: 50
-            radius: 10
-            width: parent.width * 0.7
-            height: parent.height*0.75
-            /*
-            gradient: Gradient {
-                GradientStop { position: 0.0; color: "black" }
-                GradientStop { position: 1.0; color: "grey" }
-            }
-            */
-            color: "#004D40"
-                Button {
-                    id: gohome
-                    text: qsTr("Return Home")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: parent.top
-                    anchors.topMargin: 25
-                    width: 240
-                    height: 75
-                    font.pixelSize: 20
-                    onClicked: commandStack.push(homepane)
-
-
-                }
-
-                Button {
-                    id: targetTracking
-                    text: qsTr("Option 2")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: gohome.bottom
-                    anchors.topMargin: 20
-                    width: 240
-                    height: 75
-                    font.pixelSize: 20
-                }
-
-                Button {
-                    text: qsTr("Option 3")
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    anchors.top: targetTracking.bottom
-                    anchors.topMargin: 15
-                    width: 240
-                    height: 75
-                    font.pixelSize: 20
-                }
-
             }
 
         }
 
     }
 
+
+    Dialog {
+        id: allWaypointsDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2
+        height: parent.height/ 2
+        parent: ApplicationWindow.overlay
+
+        focus: true
+        modal: true
+        title: "All Waypoints"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        contentItem: Rectangle {
+            color: "#303030"
+            implicitWidth: parent.width / 2
+            implicitHeight: parent.height/ 2
+
+
+            Label {
+                id:waypointsTitleLabel
+                text: qsTr("All Existing Waypoints")
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
+                anchors.centerIn: parent
+            }
+
+        }
+
+    }
+
+
+    Dialog {
+        id: commandHelpDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2
+        height: parent.height/ 2
+        parent: ApplicationWindow.overlay
+
+        focus: true
+        modal: true
+        title: "Help"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        contentItem: Rectangle {
+            color: "#303030"
+            implicitWidth: parent.width / 2
+            implicitHeight: parent.height/ 2
+
+
+            Label {
+                id:commandHelpDialogLabel
+                text: qsTr("Command Help")
+                color: "white"
+                font.pixelSize: 18
+                font.bold: true
+                anchors.centerIn: parent
+            }
+
+        }
+
+    }
+
+    Dialog {
+        id: immediateMoveDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2
+        height: parent.height/ 2
+        parent: ApplicationWindow.overlay
+
+        focus: true
+        modal: true
+        title: "Immediate Goal"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        contentItem: Rectangle {
+            id: immediateMoveDialogRootRect
+            color: "#303030"
+            implicitWidth: parent.width / 2
+            implicitHeight: parent.height/ 2
+
+            RowLayout {
+                anchors.fill: parent
+
+                Rectangle {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: parent.width * 0.333
+                    color: immediateMoveDialogRootRect.color
+                }
+                Rectangle {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: parent.width * 0.333
+                    color: immediateMoveDialogRootRect.color
+
+
+
+                    ColumnLayout {
+                        anchors.fill: parent
+
+
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: parent.height * 0.25
+                            color: "#303030"
+
+                            Label {
+                                id:immediateMoveDialogLabel
+                                text: qsTr("Set Immediate Goal")
+                                color: "white"
+                                font.pixelSize: 18
+                                font.bold: true
+                                anchors.centerIn: parent
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: parent.height * 0.25
+                            color: "#303030"
+                            TextField {
+                                placeholderText: qsTr("latitude")
+                            }
+                        }
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: parent.height * 0.25
+                            color: "#303030"
+                            TextField {
+                                placeholderText: qsTr("longitude")
+                            }
+                        }
+
+
+                        Rectangle {
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            Layout.fillWidth: true
+                            Layout.preferredHeight: parent.height * 0.25
+                            color: "#303030"
+                            TextField {
+                                placeholderText: qsTr("altitude")
+                            }
+                        }
+
+
+                    }
+
+
+                }
+                Rectangle {
+                    Layout.fillHeight: true
+                    Layout.preferredWidth: parent.width * 0.333
+                    color: immediateMoveDialogRootRect.color
+                }
+
+            }
+
+
+
+        }
+
+    }
+
+    RowLayout {
+        anchors.fill: parent
+
+        Rectangle {
+            id: leftCol
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.2
+            color: rootLayout.colors["dark"]
+
+
+            ColumnLayout {
+                anchors.fill: parent
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: leftCol.color
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+                        Image {
+                            id: targetIcon
+                            source: "png/earth-globe.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                allWaypointsDialog.open();
+                            }
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: leftCol.color
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+
+                        Image {
+                            id: listIcon
+                            source: "png/small-rocket-ship-silhouette.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+                    }
+
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: leftCol.color
+
+
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+
+                        Image {
+                            id: cancelIcon
+                            source: "png/remove-button.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                cancelMissionDialog.open();
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+
+
+        }
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.6
+            color: rootLayout.colors["neutral"]
+
+
+            Map {
+                anchors.fill: parent
+                plugin: osmPlugin
+                center: QtPositioning.coordinate(59.91, 10.75) // Oslo
+                zoomLevel: 10
+                anchors.margins: 10
+            }
+
+        }
+        Rectangle {
+            Layout.fillHeight: true
+            Layout.preferredWidth: parent.width * 0.2
+            color: rootLayout.colors["dark"]
+            id: rightCol
+
+
+            ColumnLayout {
+                anchors.fill: parent
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: rightCol.color
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+                        Image {
+                            id: waypointIcon
+                            source: "png/paper-push-pin.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+                    }
+
+
+
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: leftCol.color
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+
+                        Image {
+                            id: customGoalIcon
+                            source: "png/move-option.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: immediateMoveDialog.open()
+                        }
+                    }
+
+                }
+
+                Rectangle {
+                    Layout.fillWidth: true
+                    Layout.preferredHeight: parent.height * 0.333
+                    color: leftCol.color
+
+
+
+                    Rectangle {
+                        anchors.fill: parent
+                        anchors.margins: 30
+                        anchors.centerIn: parent
+                        color: rootLayout.colors["xlight"]
+                        radius: 20
+                        border.color: rootLayout.colors["dark"]
+                        border.width: 5
+
+
+                        Image {
+                            id: helpIcon
+                            source: "png/question-sign.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                commandHelpDialog.open();
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+
+        }
+
+    }
+}
