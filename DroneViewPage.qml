@@ -5,11 +5,77 @@ import QtQuick.Layouts 1.1
 import CVCamera 1.0;
 import QtMultimedia 5.5
 
+
+
+
 GroundSystemLayout {
     id:rootLayout
     myVar: "hello var"
 
 
+    Dialog {
+        id: objectDetectionDialog
+        x: (parent.width - width) / 2
+        y: (parent.height - height) / 2
+        width: parent.width / 2
+        height: parent.height/ 2
+        parent: ApplicationWindow.overlay
+
+        focus: true
+        modal: true
+        title: "Detect Objects"
+        standardButtons: Dialog.Ok | Dialog.Cancel
+
+        contentItem: Rectangle {
+            id: objectDetectionDialogRootRect
+            color: "#303030"
+            implicitWidth: parent.width / 2
+            implicitHeight: parent.height/ 2
+
+//            RowLayout {
+//                anchors.fill: parent
+//                Rectangle {
+//                    Layout.fillHeight: true
+//                    Layout.fillWidth: true
+
+                    Rectangle {
+                        id: faceDetectIconRect
+                        anchors.centerIn: parent
+                        height: parent.height * 0.7
+                        width: parent.width * 0.7
+                        radius: 10
+                        property bool clicked: false
+                        color: clicked ? rootLayout.colors["light"] : rootLayout.colors["xlight"]
+
+
+                        Image {
+                            id: faceDetectionIcon
+                            source: "png/user-shape.png"
+                            anchors.centerIn: parent
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                faceDetectIconRect.clicked = !faceDetectIconRect.clicked;
+                                camera.toggleObjectDetection();
+                            }
+                        }
+
+                    }
+
+//                }
+//            }
+
+
+        }
+
+    }
+
+    Connections{
+        target: CVController
+    }
     RowLayout {
         anchors.fill: parent
 
@@ -43,6 +109,13 @@ GroundSystemLayout {
                             anchors.centerIn: parent
                             height: parent.height * 0.7
                             width: parent.height * 0.7
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                objectDetectionDialog.open()
+                            }
                         }
                     }
 
@@ -266,12 +339,20 @@ GroundSystemLayout {
                         border.width: 5
 
 
+
                         Image {
                             id: faceIcon
                             source: "png/camera-retro.png"
                             anchors.centerIn: parent
                             height: parent.height * 0.7
                             width: parent.height * 0.7
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                CVController.processImageFrame(camera.cvImage)
+                            }
                         }
                     }
 

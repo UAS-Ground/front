@@ -4,14 +4,19 @@ import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
 import QtPositioning 5.6
 import QtLocation 5.6
+import "mapviewer"
+
+// import "mapviewer:/*"
+
+
 GroundSystemLayout {
     id:rootLayout
     myVar: "hello command var"
 
-    Plugin {
-        id: osmPlugin
-        name: "osm"
-    }
+//    Plugin {
+//        id: osmPlugin
+//        name: "osm"
+//    }
 
 
 
@@ -143,7 +148,8 @@ GroundSystemLayout {
                 Rectangle {
                     Layout.fillHeight: true
                     Layout.preferredWidth: parent.width * 0.333
-                    color: immediateMoveDialogRootRect.color
+                    //color: immediateMoveDialogRootRect.color
+                    color: "transparent"
 
 
 
@@ -156,7 +162,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "#303030"
+                            color: "transparent"
 
                             Label {
                                 id:immediateMoveDialogLabel
@@ -172,7 +178,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "#303030"
+                            color: "transparent"
                             TextField {
                                 placeholderText: qsTr("latitude")
                             }
@@ -182,7 +188,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "#303030"
+                            color: "transparent"
                             TextField {
                                 placeholderText: qsTr("longitude")
                             }
@@ -193,7 +199,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "#303030"
+                            color: "transparent"
                             TextField {
                                 placeholderText: qsTr("altitude")
                             }
@@ -207,7 +213,8 @@ GroundSystemLayout {
                 Rectangle {
                     Layout.fillHeight: true
                     Layout.preferredWidth: parent.width * 0.333
-                    color: immediateMoveDialogRootRect.color
+                    //color: immediateMoveDialogRootRect.color
+                    color: "transparent"
                 }
 
             }
@@ -274,19 +281,27 @@ GroundSystemLayout {
                         anchors.fill: parent
                         anchors.margins: 30
                         anchors.centerIn: parent
-                        color: rootLayout.colors["xlight"]
+                        //color: rootLayout.colors["xlight"]
+                        color: parent.color
                         radius: 20
                         border.color: rootLayout.colors["dark"]
                         border.width: 5
 
 
-                        Image {
-                            id: listIcon
-                            source: "png/small-rocket-ship-silhouette.png"
+
+                        Slider {
+                            id: slider
+                            value: 0.5
                             anchors.centerIn: parent
-                            height: parent.height * 0.7
-                            width: parent.height * 0.7
+                            orientation: Qt.Vertical
                         }
+//                        Image {
+//                            id: listIcon
+//                            source: "png/small-rocket-ship-silhouette.png"
+//                            anchors.centerIn: parent
+//                            height: parent.height * 0.7
+//                            width: parent.height * 0.7
+//                        }
                     }
 
                 }
@@ -333,16 +348,21 @@ GroundSystemLayout {
         Rectangle {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width * 0.6
-            color: rootLayout.colors["neutral"]
+            //color: rootLayout.colors["red"]
+            color: "yellow"
 
-
-            Map {
+            MapViewer {
                 anchors.fill: parent
-                plugin: osmPlugin
-                center: QtPositioning.coordinate(59.91, 10.75) // Oslo
-                zoomLevel: 10
-                anchors.margins: 10
             }
+
+//            Map {
+//                anchors.fill: parent
+//                plugin: osmPlugin
+//                center: QtPositioning.coordinate(59.91, 10.75) // Oslo
+//                zoomLevel: 10
+//                anchors.margins: 10
+//            }
+
 
         }
         Rectangle {
@@ -361,10 +381,12 @@ GroundSystemLayout {
                     color: rightCol.color
 
                     Rectangle {
+                        id: pushPinRect
                         anchors.fill: parent
                         anchors.margins: 30
                         anchors.centerIn: parent
-                        color: rootLayout.colors["xlight"]
+                        property bool clicked: false
+                        color: clicked ? rootLayout.colors["light"] : rootLayout.colors["xlight"];
                         radius: 20
                         border.color: rootLayout.colors["dark"]
                         border.width: 5
@@ -375,6 +397,13 @@ GroundSystemLayout {
                             anchors.centerIn: parent
                             height: parent.height * 0.7
                             width: parent.height * 0.7
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                pushPinRect.clicked = !pushPinRect.clicked;
+                            }
                         }
                     }
 

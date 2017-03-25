@@ -142,7 +142,7 @@ ApplicationWindow {
         }
 
         TabButton {
-            text: qsTr("Status")
+            text: qsTr("Sensors/Health")
         }
     }
 }
