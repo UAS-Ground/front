@@ -1,6 +1,11 @@
  <launch>
-
-
+<!--
+ 	<param
+ 		name="/uas_video/image_transport"
+ 		value="compressed"
+	>
+ 	</param>
+-->
     <node pkg="uas_node" type="uas_node_video"
           name="uas_video" />
   </launch>

@@ -57,17 +57,18 @@ GroundSystemLayout {
                             width:parent.width * 2
                             height: parent.height
                             flickableDirection: Flickable.HorizontalFlick
-                            contentWidth: flickRect.width
+                            contentWidth: parent.width * 2
 
                             Rectangle {
                                 id: flickRect
-                                width: sensorLayout.implicitWidth
+                                width: parent.width * 2
                                 height: parent.height
                                 color: rootLayout.colors["neutral"]
 
                                 RowLayout{
                                     id: sensorLayout
                                     height: parent.height
+
 
                                     SensorGaugeView {
                                         rectColor: rootLayout.colors["light"]

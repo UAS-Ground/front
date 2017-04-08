@@ -1,47 +1,11 @@
-#TARGET = uas_gs_ground
-TEMPLATE = app
-
-QT += qml quick quickcontrols2 network positioning location multimedia
+QT += qml quick quickcontrols2
 
 CONFIG += c++11
 
-SOURCES += main.cpp \
-    cvcontroller.cpp
+SOURCES +=
 
 RESOURCES += qml.qrc \
     mapviewer.qrc
-
-
-
-OTHER_FILES += mapviewer/mapviewer.qml \
-    mapviewer/helper.js \
-    mapviewer/map/MapComponent.qml \
-    mapviewer/map/Marker.qml \
-    mapviewer/map/CircleItem.qml \
-    mapviewer/map/RectangleItem.qml \
-    mapviewer/map/PolylineItem.qml \
-    mapviewer/map/PolygonItem.qml \
-    mapviewer/map/ImageItem.qml \
-    mapviewer/map/MiniMap.qml \
-    mapviewer/menus/ItemPopupMenu.qml \
-    mapviewer/menus/MainMenu.qml \
-    mapviewer/menus/MapPopupMenu.qml \
-    mapviewer/menus/MarkerPopupMenu \
-    mapviewer/forms/Geocode.qml \
-    mapviewer/forms/GeocodeForm.ui.qml\
-    mapviewer/forms/Message.qml \
-    mapviewer/forms/MessageForm.ui.qml \
-    mapviewer/forms/ReverseGeocode.qml \
-    mapviewer/forms/ReverseGeocodeForm.ui.qml \
-    mapviewer/forms/RouteCoordinate.qml \
-    mapviewer/forms/Locale.qml \
-    mapviewer/forms/LocaleForm.ui.qml \
-    mapviewer/forms/RouteAddress.qml \
-    mapviewer/forms/RouteAddressForm.ui.qml \
-    mapviewer/forms/RouteCoordinateForm.ui.qml \
-    mapviewer/forms/RouteList.qml \
-    mapviewer/forms/RouteListDelegate.qml \
-    mapviewer/forms/RouteListHeader.qml
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =
@@ -99,28 +63,3 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 #        android.hardware.camera
 #}
 
-
-
-OPENCV_PATH = /home/tyler/OpenCV
-
-LIBS_PATH = /home/tyler/OpenCV/build/lib
-
-
-
-LIBS     +=     -L$$LIBS_PATH     -lopencv_core     -lopencv_highgui     -lopencv_imgproc     -lopencv_videoio		-lopencv_objdetect
-
-
-
-
-INCLUDEPATH +=     $$OPENCV_PATH/modules/core/include/ \ #core module
-    $$OPENCV_PATH/modules/highgui/include/ \ #highgui modul
-    $$OPENCV_PATH/modules/objdetect/include/ \ #objdetect
-    $$OPENCV_PATH/modules/imgproc/include/ \ #objdetect
-
-#/home/tyler/OpenCV/modules/imgproc/include
-
-#target.path = /home/tyler/NEW_UAV
-#INSTALLS += target
-
-HEADERS += \
-    cvcontroller.h

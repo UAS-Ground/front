@@ -5,10 +5,6 @@ import QtQuick.Layouts 1.1
 import QtPositioning 5.6
 import QtLocation 5.6
 import "mapviewer"
-
-// import "mapviewer:/*"
-
-
 GroundSystemLayout {
     id:rootLayout
     myVar: "hello command var"
@@ -123,7 +119,7 @@ GroundSystemLayout {
         x: (parent.width - width) / 2
         y: (parent.height - height) / 2
         width: parent.width / 2
-        height: parent.height/ 2
+        height: parent.height * 0.75
         parent: ApplicationWindow.overlay
 
         focus: true
@@ -135,7 +131,7 @@ GroundSystemLayout {
             id: immediateMoveDialogRootRect
             color: "#303030"
             implicitWidth: parent.width / 2
-            implicitHeight: parent.height/ 2
+            implicitHeight: colLayout.height
 
             RowLayout {
                 anchors.fill: parent
@@ -148,13 +144,13 @@ GroundSystemLayout {
                 Rectangle {
                     Layout.fillHeight: true
                     Layout.preferredWidth: parent.width * 0.333
-                    //color: immediateMoveDialogRootRect.color
-                    color: "transparent"
+                    color: immediateMoveDialogRootRect.color
 
 
 
                     ColumnLayout {
                         anchors.fill: parent
+                        id:colLayout
 
 
 
@@ -162,7 +158,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "transparent"
+                            color: "#303030"
 
                             Label {
                                 id:immediateMoveDialogLabel
@@ -178,7 +174,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "transparent"
+                            color: "#303030"
                             TextField {
                                 placeholderText: qsTr("latitude")
                             }
@@ -188,7 +184,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "transparent"
+                            color: "#303030"
                             TextField {
                                 placeholderText: qsTr("longitude")
                             }
@@ -199,7 +195,7 @@ GroundSystemLayout {
                             anchors.horizontalCenter: parent.horizontalCenter
                             Layout.fillWidth: true
                             Layout.preferredHeight: parent.height * 0.25
-                            color: "transparent"
+                            color: "#303030"
                             TextField {
                                 placeholderText: qsTr("altitude")
                             }
@@ -213,8 +209,7 @@ GroundSystemLayout {
                 Rectangle {
                     Layout.fillHeight: true
                     Layout.preferredWidth: parent.width * 0.333
-                    //color: immediateMoveDialogRootRect.color
-                    color: "transparent"
+                    color: immediateMoveDialogRootRect.color
                 }
 
             }
@@ -281,27 +276,19 @@ GroundSystemLayout {
                         anchors.fill: parent
                         anchors.margins: 30
                         anchors.centerIn: parent
-                        //color: rootLayout.colors["xlight"]
-                        color: parent.color
+                        color: rootLayout.colors["xlight"]
                         radius: 20
                         border.color: rootLayout.colors["dark"]
                         border.width: 5
 
 
-
-                        Slider {
-                            id: slider
-                            value: 0.5
+                        Image {
+                            id: listIcon
+                            source: "png/bull-horn-announcer.png"
                             anchors.centerIn: parent
-                            orientation: Qt.Vertical
+                            height: parent.height * 0.7
+                            width: parent.height * 0.7
                         }
-//                        Image {
-//                            id: listIcon
-//                            source: "png/small-rocket-ship-silhouette.png"
-//                            anchors.centerIn: parent
-//                            height: parent.height * 0.7
-//                            width: parent.height * 0.7
-//                        }
                     }
 
                 }
@@ -348,12 +335,10 @@ GroundSystemLayout {
         Rectangle {
             Layout.fillHeight: true
             Layout.preferredWidth: parent.width * 0.6
-            //color: rootLayout.colors["red"]
-            color: "yellow"
+            color: rootLayout.colors["neutral"]
 
-            MapViewer {
-                anchors.fill: parent
-            }
+
+
 
 //            Map {
 //                anchors.fill: parent
@@ -363,6 +348,9 @@ GroundSystemLayout {
 //                anchors.margins: 10
 //            }
 
+//            mapviewer {
+
+//            }
 
         }
         Rectangle {
@@ -381,12 +369,12 @@ GroundSystemLayout {
                     color: rightCol.color
 
                     Rectangle {
+                        property bool pressed: false
                         id: pushPinRect
                         anchors.fill: parent
                         anchors.margins: 30
                         anchors.centerIn: parent
-                        property bool clicked: false
-                        color: clicked ? rootLayout.colors["light"] : rootLayout.colors["xlight"];
+                        color: rootLayout.colors["xlight"]
                         radius: 20
                         border.color: rootLayout.colors["dark"]
                         border.width: 5
@@ -398,11 +386,16 @@ GroundSystemLayout {
                             height: parent.height * 0.7
                             width: parent.height * 0.7
                         }
+                    }
 
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                pushPinRect.clicked = !pushPinRect.clicked;
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            pushPinRect.pressed = !pushPinRect.pressed;
+                            if(pushPinRect.pressed){
+                                pushPinRect.color = rootLayout.colors["light"];
+                            } else {
+                                pushPinRect.color = rootLayout.colors["xlight"];
                             }
                         }
                     }

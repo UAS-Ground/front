@@ -3,7 +3,7 @@
    "qt": "/home/tyler/Qt/5.8/android_armv7",
    "sdk": "/home/tyler/Android/Sdk",
    "sdkBuildToolsRevision": "25.0.2",
-   "ndk": "/home/tyler/Android/Sdk/ndk-bundle",
+   "ndk": "/home/tyler/android-ndk-r13b",
    "toolchain-prefix": "arm-linux-androideabi",
    "tool-prefix": "arm-linux-androideabi",
    "toolchain-version": "4.9",

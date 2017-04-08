@@ -2,80 +2,14 @@ import QtQuick 2.7
 import QtQuick.Controls 2.1
 import QtQuick.Controls.Styles 1.4
 import QtQuick.Layouts 1.1
-import CVCamera 1.0;
+//import CVCamera 1.0;
 import QtMultimedia 5.5
-
-
-
 
 GroundSystemLayout {
     id:rootLayout
     myVar: "hello var"
 
 
-    Dialog {
-        id: objectDetectionDialog
-        x: (parent.width - width) / 2
-        y: (parent.height - height) / 2
-        width: parent.width / 2
-        height: parent.height/ 2
-        parent: ApplicationWindow.overlay
-
-        focus: true
-        modal: true
-        title: "Detect Objects"
-        standardButtons: Dialog.Ok | Dialog.Cancel
-
-        contentItem: Rectangle {
-            id: objectDetectionDialogRootRect
-            color: "#303030"
-            implicitWidth: parent.width / 2
-            implicitHeight: parent.height/ 2
-
-//            RowLayout {
-//                anchors.fill: parent
-//                Rectangle {
-//                    Layout.fillHeight: true
-//                    Layout.fillWidth: true
-
-                    Rectangle {
-                        id: faceDetectIconRect
-                        anchors.centerIn: parent
-                        height: parent.height * 0.7
-                        width: parent.width * 0.7
-                        radius: 10
-                        property bool clicked: false
-                        color: clicked ? rootLayout.colors["light"] : rootLayout.colors["xlight"]
-
-
-                        Image {
-                            id: faceDetectionIcon
-                            source: "png/user-shape.png"
-                            anchors.centerIn: parent
-                            height: parent.height * 0.7
-                            width: parent.height * 0.7
-                        }
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                faceDetectIconRect.clicked = !faceDetectIconRect.clicked;
-                                camera.toggleObjectDetection();
-                            }
-                        }
-
-                    }
-
-//                }
-//            }
-
-
-        }
-
-    }
-
-    Connections{
-        target: CVController
-    }
     RowLayout {
         anchors.fill: parent
 
@@ -109,13 +43,6 @@ GroundSystemLayout {
                             anchors.centerIn: parent
                             height: parent.height * 0.7
                             width: parent.height * 0.7
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                objectDetectionDialog.open()
-                            }
                         }
                     }
 
@@ -186,55 +113,55 @@ GroundSystemLayout {
             color: rootLayout.colors["neutral"]
 
 
-//            Rectangle {
-//                anchors.centerIn: parent
-//                width: parent.width
-//                height: width * 3/4
-//                color: rootLayout.colors["dark"]
-//                radius: 20
-
             Rectangle {
                 anchors.centerIn: parent
-                width: 690
-                height: 530
+                width: parent.width
+                height: width * 3/4
                 color: rootLayout.colors["dark"]
                 radius: 20
 
+//            Rectangle {
+//                anchors.centerIn: parent
+//                width: 690
+//                height: 530
+//                color: rootLayout.colors["dark"]
+//                radius: 20
 
-                CVCamera {
-                    id: camera
-                    device: deviceBox.currentIndex
-                    size: "640x480"
-                    anchors.centerIn: parent
-                }
 
-//                Camera {
+//                CVCamera {
 //                    id: camera
-//                }
-
-//                VideoOutput {
-//                    anchors.top: camera.top
-//                    id: output
-//                    source: camera
-//                    anchors.fill: parent
-//                    anchors.margins: 10
+//                    device: deviceBox.currentIndex
+//                    size: "640x480"
 //                    anchors.centerIn: parent
 //                }
+
+                Camera {
+                    id: camera
+                }
 
                 VideoOutput {
                     anchors.top: camera.top
                     id: output
                     source: camera
+                    anchors.fill: parent
+                    anchors.margins: 10
                     anchors.centerIn: parent
                 }
 
-                ComboBox {
-                    id: deviceBox
-                    width: 200
-                    anchors.top: output.bottom
-                    anchors.horizontalCenter: output.horizontalCenter
-                    model: camera.deviceList
-                }
+//                VideoOutput {
+//                    anchors.top: camera.top
+//                    id: output
+//                    source: camera
+//                    anchors.centerIn: parent
+//                }
+
+//                ComboBox {
+//                    id: deviceBox
+//                    width: 200
+//                    anchors.top: output.bottom
+//                    anchors.horizontalCenter: output.horizontalCenter
+//                    model: camera.deviceList
+//                }
             }
 
 
@@ -339,20 +266,12 @@ GroundSystemLayout {
                         border.width: 5
 
 
-
                         Image {
                             id: faceIcon
                             source: "png/camera-retro.png"
                             anchors.centerIn: parent
                             height: parent.height * 0.7
                             width: parent.height * 0.7
-                        }
-
-                        MouseArea {
-                            anchors.fill: parent
-                            onClicked: {
-                                CVController.processImageFrame(camera.cvImage)
-                            }
                         }
                     }
 

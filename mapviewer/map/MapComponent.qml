@@ -61,8 +61,6 @@ Map {
     property alias routeQuery: routeQuery
     property alias routeModel: routeModel
     property alias geocodeModel: geocodeModel
-    property variant salesmanGraph: new Helper.SalesmanGraph()
-    property int currentId: 0
 
     signal showGeocodeInfo()
     signal geocodeFinished()
@@ -73,7 +71,6 @@ Map {
     signal showRouteMenu(variant coordinate)
     signal showPointMenu(variant coordinate)
     signal showRouteList()
-
 
     function geocodeMessage()
     {
@@ -152,8 +149,6 @@ Map {
         map.mapItems = []
     }
 
-
-
     function addMarker()
     {
         var count = map.markers.length
@@ -163,21 +158,13 @@ Map {
         marker.z = map.z+1
         marker.coordinate = mouseArea.lastCoordinate
 
-        //polyline.addCoordinate(marker.coordinate);
-
         //update list of markers
         var myArray = new Array()
         for (var i = 0; i<count; i++){
             myArray.push(markers[i])
-            console.log('looking at marker ' + i + ': ' + markers[i].coordinate);
         }
         myArray.push(marker)
         markers = myArray
-
-        salesmanGraph.addNode(marker.coordinate.latitude, marker.coordinate.longitude);
-
-        var newCoords = salesmanGraph.shortestPath(marker.coordinate.latitude * 0.9999999, marker.coordinate.longitude * 1.000001);
-        polyline.path = newCoords;
     }
 
     function addGeoItem(item)
@@ -377,32 +364,6 @@ Map {
         anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
     }
 
-    /*
-
-        Map {
-            MapPolyline {
-                line.width: 3
-                line.color: 'green'
-                path: [
-                    { latitude: -27, longitude: 153.0 },
-                    { latitude: -27, longitude: 154.1 },
-                    { latitude: -28, longitude: 153.5 },
-                    { latitude: -29, longitude: 153.5 }
-                ]
-            }
-        }
-
-
-
-    */
-
-
-    MapPolyline {
-        id: polyline
-        line.width: 3
-        line.color: 'green'
-        path: []
-    }
 
     Slider {
         id: zoomSlider;
