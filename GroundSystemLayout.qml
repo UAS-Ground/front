@@ -33,8 +33,4 @@ Item {
 
 
 
-    Component.onCompleted: {
-        console.log("in GroundSystemLayout with myVar = " + myVar);
-    }
-
 }

@@ -378,41 +378,11 @@
         <file>SensorGraphView.qml</file>
         <file>png/bullseye.png</file>
         <file>SensorVerticalGaugeView.qml</file>
-        <file>uas_catkin_ws/src/uas_node/src/uas_video.cpp</file>
-        <file>main.cpp</file>
-        <file>mapviewer/forms/Geocode.qml</file>
-        <file>mapviewer/forms/GeocodeForm.ui.qml</file>
-        <file>mapviewer/forms/Locale.qml</file>
-        <file>mapviewer/forms/LocaleForm.ui.qml</file>
-        <file>mapviewer/forms/Message.qml</file>
-        <file>mapviewer/forms/MessageForm.ui.qml</file>
-        <file>mapviewer/forms/ReverseGeocode.qml</file>
-        <file>mapviewer/forms/ReverseGeocodeForm.ui.qml</file>
-        <file>mapviewer/forms/RouteAddress.qml</file>
-        <file>mapviewer/forms/RouteAddressForm.ui.qml</file>
-        <file>mapviewer/forms/RouteCoordinate.qml</file>
-        <file>mapviewer/forms/RouteCoordinateForm.ui.qml</file>
-        <file>mapviewer/forms/RouteList.qml</file>
-        <file>mapviewer/forms/RouteListDelegate.qml</file>
-        <file>mapviewer/forms/RouteListHeader.qml</file>
-        <file>mapviewer/map/CircleItem.qml</file>
-        <file>mapviewer/map/ImageItem.qml</file>
-        <file>mapviewer/map/MapComponent.qml</file>
-        <file>mapviewer/map/Marker.qml</file>
-        <file>mapviewer/map/MiniMap.qml</file>
-        <file>mapviewer/map/PolygonItem.qml</file>
-        <file>mapviewer/map/PolylineItem.qml</file>
-        <file>mapviewer/map/RectangleItem.qml</file>
-        <file>mapviewer/menus/ItemPopupMenu.qml</file>
-        <file>mapviewer/menus/MainMenu.qml</file>
-        <file>mapviewer/menus/MapPopupMenu.qml</file>
-        <file>mapviewer/menus/MarkerPopupMenu.qml</file>
-        <file>mapviewer/resources/icon.png</file>
-        <file>mapviewer/resources/marker.png</file>
-        <file>mapviewer/resources/scale.png</file>
-        <file>mapviewer/resources/scale_end.png</file>
-        <file>mapviewer/helper.js</file>
-        <file>mapviewer/mapviewer.qml</file>
-        <file>mapviewer/mapviewer.qrc</file>
+        <file>CustomGauge.qml</file>
+        <file>png/drone-512.png</file>
+        <file>png/license_plate.png</file>
+        <file>png/gun.png</file>
+        <file>GroundSystemModal.qml</file>
+        <file>GroundSystemFeatureButton.qml</file>
     </qresource>
 </RCC>

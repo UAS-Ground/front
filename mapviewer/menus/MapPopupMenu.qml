@@ -51,6 +51,7 @@ Menu {
         clear()
         addItem(qsTr("Add Marker")).triggered.connect(function(){itemClicked("addMarker")})
         addItem(qsTr("Get coordinate")).triggered.connect(function(){itemClicked("getCoordinate")})
+        addItem(qsTr("Add Chemical Radius")).triggered.connect(function(){itemClicked("addChemicalRadius")})
         addItem(qsTr("Fit Viewport To Map Items")).triggered.connect(function(){itemClicked("fitViewport")})
 
         if (markersCount > 0) {

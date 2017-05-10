@@ -34,7 +34,8 @@
         <file>mapviewer/resources/scale.png</file>
         <file>mapviewer/resources/scale_end.png</file>
         <file>mapviewer/helper.js</file>
-        <file>mapviewer/mapviewer.qml</file>
-        <file>uas_catkin_ws/src/uas_node/src/uas_video.cpp</file>
+        <file>mapviewer/MapViewer.qml</file>
+        <file>mapviewer/map/Drone.qml</file>
+        <file>mapviewer/resources/droneImage.png</file>
     </qresource>
 </RCC>

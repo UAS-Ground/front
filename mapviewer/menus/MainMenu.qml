@@ -41,8 +41,9 @@
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtLocation 5.6
+import QtQuick.Layouts 1.1
 
-MenuBar {
+Item {
     property variant  providerMenu: providerMenu
     property variant  mapTypeMenu: mapTypeMenu
     property variant  toolsMenu: toolsMenu
@@ -54,79 +55,108 @@ MenuBar {
     signal selectTool(string tool);
     signal toggleMapState(string state)
 
-    Menu {
-        id: providerMenu
-        title: qsTr("Provider")
+    property ListModel providerCBModel: ListModel {}
+    property ListModel mapTypeCBModel: ListModel {}
+    property ListModel toolsCBModel: ListModel {}
 
-        function createMenu(plugins)
-        {
-            clear()
-            for (var i = 0; i < plugins.length; i++) {
-                createProviderMenuItem(plugins[i]);
+
+    Rectangle {
+        anchors.fill: parent
+        color: "pink"
+
+        RowLayout {
+            anchors.fill: parent
+            ComboBox {
+                id: providerMenu
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width * 0.333
+                model: ListModel {
+
+                }
+                function createMenu(plugins)
+                {
+                    providerCBModel.clear();
+                    for (var i = 0; i < plugins.length; i++) {
+                        createProviderMenuItem(plugins[i]);
+                    }
+                }
+
+                function createProviderMenuItem(provider)
+                {
+                    //providerCBModel.insert();
+                    update();
+                }
             }
+            ComboBox {
+                id: mapTypeMenu
+                Layout.fillHeight: true
+                Layout.preferredWidth: parent.width * 0.333
+                model: ListModel {
+
+                }
+
+                textRole: "name"
+
+
+                function createMenu(map)
+                {
+                    mapTypeCBModel.clear()
+                    for (var i = 0; i<map.supportedMapTypes.length; i++) {
+                        //createMapTypeMenuItem(map.supportedMapTypes[i]).checked = (map.activeMapType === map.supportedMapTypes[i]);
+                        createMapTypeMenuItem(map.supportedMapTypes[i]);
+                    }
+                }
+
+                function createMapTypeMenuItem(mapType)
+                {
+                    //mapTypeCBModel.insert(mapType);
+                    update();
+                }
+            }
+            ComboBox {
+                id: toolsMenu
+                property bool isFollowMe: false;
+                property bool isMiniMap: false;
+                Layout.preferredWidth: parent.width * 0.333
+                Layout.fillHeight: true
+                model: ListModel {
+
+                }
+
+                function createMenu(map)
+                {
+                    toolsCBModel.clear()
+                    /*
+                        if (map.plugin.supportsGeocoding(Plugin.ReverseGeocodingFeature)) {
+                            //toolsCBModel.push(qsTr("Reverse geocode")).triggered.connect(function(){selectTool("RevGeocode")})
+                            toolsCBModel.insert(qsTr("Reverse geocode"));
+                        }
+                        if (map.plugin.supportsGeocoding()) {
+                            toolsCBModel.insert(qsTr("Geocode"))
+                        }
+                        if (map.plugin.supportsRouting()) {
+                            toolsCBModel.insert(qsTr("Route with coordinates"))
+                            toolsCBModel.insert(qsTr("Route with address"))
+                        }
+
+                        var item = addItem("")
+                        item.text = Qt.binding(function() { return isMiniMap ? qsTr("Hide minimap") : qsTr("Minimap") })
+                        item.triggered.connect(function() {toggleMapState("MiniMap")})
+
+                        item = addItem("")
+                        item.text = Qt.binding(function() { return isFollowMe ? qsTr("Stop following") : qsTr("Follow me")})
+                        item.triggered.connect(function() {toggleMapState("FollowMe")})
+
+                        addItem(qsTr("Language")).triggered.connect(function(){selectTool("Language")})
+                        addItem(qsTr("Prefetch Map Data")).triggered.connect(function(){selectTool("Prefetch")})
+                        addItem(qsTr("Clear Map Data")).triggered.connect(function(){selectTool("Clear")})
+                    */
+                }
+            }
+
         }
 
-        function createProviderMenuItem(provider)
-        {
-            var item = addItem(provider);
-            item.checkable = true;
-            item.triggered.connect(function(){selectProvider(provider)})
-        }
     }
 
-    Menu {
-        id: mapTypeMenu
-        title: qsTr("MapType")
 
-        function createMenu(map)
-        {
-            clear()
-            for (var i = 0; i<map.supportedMapTypes.length; i++) {
-                createMapTypeMenuItem(map.supportedMapTypes[i]).checked =
-                        (map.activeMapType === map.supportedMapTypes[i]);
-            }
-        }
-
-        function createMapTypeMenuItem(mapType)
-        {
-            var item = addItem(mapType.name);
-            item.checkable = true;
-            item.triggered.connect(function(){selectMapType(mapType)})
-            return item;
-        }
-    }
-
-    Menu {
-        id: toolsMenu
-        property bool isFollowMe: false;
-        property bool isMiniMap: false;
-        title: qsTr("Tools")
-
-        function createMenu(map)
-        {
-            clear()
-            if (map.plugin.supportsGeocoding(Plugin.ReverseGeocodingFeature)) {
-                addItem(qsTr("Reverse geocode")).triggered.connect(function(){selectTool("RevGeocode")})
-            }
-            if (map.plugin.supportsGeocoding()) {
-                addItem(qsTr("Geocode")).triggered.connect(function(){selectTool("Geocode")})
-            }
-            if (map.plugin.supportsRouting()) {
-                addItem(qsTr("Route with coordinates")).triggered.connect(function(){selectTool("CoordinateRoute")})
-                addItem(qsTr("Route with address")).triggered.connect(function(){selectTool("AddressRoute")})
-            }
-
-            var item = addItem("")
-            item.text = Qt.binding(function() { return isMiniMap ? qsTr("Hide minimap") : qsTr("Minimap") })
-            item.triggered.connect(function() {toggleMapState("MiniMap")})
-
-            item = addItem("")
-            item.text = Qt.binding(function() { return isFollowMe ? qsTr("Stop following") : qsTr("Follow me")})
-            item.triggered.connect(function() {toggleMapState("FollowMe")})
-
-            addItem(qsTr("Language")).triggered.connect(function(){selectTool("Language")})
-            addItem(qsTr("Prefetch Map Data")).triggered.connect(function(){selectTool("Prefetch")})
-            addItem(qsTr("Clear Map Data")).triggered.connect(function(){selectTool("Clear")})
-        }
-    }
 }

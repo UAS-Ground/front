@@ -100,6 +100,11 @@ MapQuickItem {
             font.bold: true
             font.pixelSize: 14
             horizontalAlignment: Text.AlignHCenter
+            function setText(newText){
+                //console.log("in marker with prev text " + text + " and new text " + newText);
+                text = newText
+            }
+
             Component.onCompleted: {
                 text = map.markerCounter
             }

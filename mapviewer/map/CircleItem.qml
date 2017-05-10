@@ -55,4 +55,12 @@ MapCircle {
         center.longitude = markers[index].coordinate.longitude
         radius= center.distanceTo(markers[index + 1].coordinate)
     }
+
+    function setGeometryForChemical(coord, rad, color){
+        console.log("Hi, I am in setGeometryForChemical with coord.latitude=" + coord.latitude + " and coord.longitude=" + coord.longitude + " and radius="+rad);
+        center.latitude = coord.latitude
+        center.longitude = coord.longitude
+        this.color = color
+        radius= rad
+    }
 }

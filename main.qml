@@ -16,6 +16,8 @@ ApplicationWindow {
 
 
 
+
+
     Dialog {
         id: settingsDialog
         x: (parent.width - width) / 2
@@ -138,11 +140,11 @@ ApplicationWindow {
             text: qsTr("Command")
         }
         TabButton {
-            text: qsTr("View")
+            text: qsTr("Camera")
         }
 
         TabButton {
-            text: qsTr("Status")
+            text: qsTr("Sensors/Health")
         }
     }
 }

@@ -37,6 +37,12 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
+
+
+/*
+    Modified by: Richard Thome for UAS Ground System Project as CSULA
+*/
+
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtLocation 5.6
@@ -49,6 +55,7 @@ Map {
 //! [top]
     property variant markers
     property variant mapItems
+    property variant droneImage
     property int markerCounter: 0 // counter for total amount of markers. Resets to 0 when number of markers = 0
     property int currentMarker
     property int lastX : -1
@@ -61,6 +68,9 @@ Map {
     property alias routeQuery: routeQuery
     property alias routeModel: routeModel
     property alias geocodeModel: geocodeModel
+    property variant salesmanGraph: new Helper.SalesmanGraph()
+    property int currentId: 0
+
 
     signal showGeocodeInfo()
     signal geocodeFinished()
@@ -71,6 +81,7 @@ Map {
     signal showRouteMenu(variant coordinate)
     signal showPointMenu(variant coordinate)
     signal showRouteList()
+
 
     function geocodeMessage()
     {
@@ -149,6 +160,36 @@ Map {
         map.mapItems = []
     }
 
+    function clearWaypoints(){
+        console.log("in MapComponent clearwayPOints!()")
+        for (var i = 0; i<map.markers.length; i++){
+            map.removeMapItem(map.markers[i])
+            map.markers[i].destroy()
+        }
+        map.removeMapItem(polyline)
+        if(polyline){
+            polyline.destroy()
+        }
+        markers = new Array()
+        //polyline.path = new Array()
+        droneImage.setVel(0.0, 0.0);
+    }
+
+    function getWaypointList(){
+        var result = [];
+
+        for (var i = 0; i<map.markers.length; i++){
+            result[i] = map.markers[i].coordinate;
+        }
+
+        return result;
+
+
+
+    }
+
+
+
     function addMarker()
     {
         var count = map.markers.length
@@ -158,13 +199,188 @@ Map {
         marker.z = map.z+1
         marker.coordinate = mouseArea.lastCoordinate
 
+        //polyline.addCoordinate(marker.coordinate);
+
         //update list of markers
         var myArray = new Array()
         for (var i = 0; i<count; i++){
             myArray.push(markers[i])
+            //console.log('looking at marker ' + i + ': ' + markers[i].coordinate);
         }
         myArray.push(marker)
         markers = myArray
+
+        salesmanGraph.addNode(marker.coordinate.latitude, marker.coordinate.longitude, marker);
+
+
+
+        //var result = salesmanGraph.shortestPath(marker.coordinate.latitude * 0.9999999, marker.coordinate.longitude * 1.000001);
+        var result = salesmanGraph.shortestPath(droneImage.coordinate.latitude, droneImage.coordinate.longitude);
+        polyline.path = result.pathCoords;
+        markers = result.markers;
+        //map.clearMapItems();
+        for(i = 0; i < markers.length; i++){
+            if(i == markers.length - 1){
+
+                //console.log("AFTER SHORTESTPATH()...." + markers[i].sourceItem.children.length + " children!");
+                for(var j = 0; j < markers[i].sourceItem.children.length; j++){
+                    //console.log("Looking at key: " + markers[i].sourceItem.children[j])
+                }
+            }
+
+            markers[i].sourceItem.children[1].setText("" + (i + 1));
+
+
+            //map.addMapItem(markers[i]);
+        }
+        //map.addMapItem(polyline);
+        droneImage.setNextTarget(markers[0].coordinate);
+
+        var inspectedOne = false;
+
+        console.log("| POLYLINE:");
+        for(var p in polyline.path){
+            console.log("|  |  loking at: " + p + " and path[p]: " + polyline.path[p]);
+
+        }
+    }
+
+    function onTargetReached(){
+
+
+        console.log("BEGIN In onTargetReached()");
+        map.removeMapItem(markers[0]);
+        //markers = myArray
+        console.log("| MARKERS: BEFORE SPLICE");
+        for(var m in map.markers){
+            console.log("|  |  loking at: " + map.markers[m].sourceItem.children[1].text);
+        }
+        //map.markers.splice(0,1);
+        console.log("| MARKERS: AFTER SPLICE");
+        for(var m in map.markers){
+            console.log("|  |  loking at: " + map.markers[m].sourceItem.children[1].text);
+        }
+
+
+        console.log("| POLYLINE:");
+        for(var p in polyline.path){
+            console.log("|  |  loking at: " + p + " and path[p]: " + polyline.path[p]);
+        }
+
+        var result = salesmanGraph.shortestPath(droneImage.coordinate.latitude, droneImage.coordinate.longitude);
+        //var resultRemove = salesmanGraph.removeFront(map.markers[0]);
+        //map.markers = resultRemove.newMarkers;
+
+        //polyline.path = resultRemove.newPolyPath;
+
+
+        if(map.markers.length < 1){
+
+            console.log("|  No targets in list");
+        } else {
+            droneImage.setNextTarget(map.markers[0].coordinate);
+        }
+
+    }
+
+    function recalculatePath(){
+        //console.log("In recalculatePath()");
+        if(!polyline){
+            return;
+        }
+
+        var result = salesmanGraph.shortestPath(droneImage.coordinate.latitude, droneImage.coordinate.longitude);
+        polyline.path = result.pathCoords;
+        markers = result.markers;
+        //map.clearMapItems();
+        for(var i = 0; i < markers.length; i++){
+            if(i == markers.length - 1){
+
+                //console.log("AFTER SHORTESTPATH()...." + markers[i].sourceItem.children.length + " children!");
+                for(var j = 0; j < markers[i].sourceItem.children.length; j++){
+                    //console.log("Looking at key: " + markers[i].sourceItem.children[j])
+                }
+            }
+
+            markers[i].sourceItem.children[1].setText("" + (i + 1));
+
+
+            //map.addMapItem(markers[i]);
+        }
+
+        if(droneImage.nextTarget !== null){
+            //console.log("In recalculatePath(): drone pos {lat:"+droneImage.coordinate.latitude+", lon:"+droneImage.coordinate.longitude+"}");
+            //console.log("In recalculatePath(): targt pos {lat:"+droneImage.nextTarget.latitude+", lon:"+droneImage.nextTarget.longitude+"}");
+            /*
+                if(droneImage.movingRight){
+                    //console.log("In recalculatePath(): drone is moving right..");
+
+                    if(droneImage.movingUp){
+
+                        console.log("In recalculatePath(): drone is moving up..");
+                        // drone moving right and up
+
+                        if(droneImage.coordinate.latitude > droneImage.nextTarget.latitude && droneImage.coordinate.longitude > droneImage.nextTarget.longitude){
+
+                            // drone has reached targ
+                            onTargetReached();
+
+                        }
+
+                    } else {
+                        //console.log("In recalculatePath(): drone is moving down..");
+                        // drone moving right and down
+
+                        if(droneImage.coordinate.latitude < droneImage.nextTarget.latitude && droneImage.coordinate.longitude > droneImage.nextTarget.longitude){
+
+                            // drone has reached targ
+                            onTargetReached();
+                        }
+                    }
+                } else {
+                    //console.log("In recalculatePath(): drone is moving left..");
+
+                    if(droneImage.movingUp){
+                        //console.log("In recalculatePath(): drone is moving up..");
+
+                        // drone moving left and up
+                        if(droneImage.coordinate.latitude < droneImage.nextTarget.latitude && droneImage.coordinate.longitude < droneImage.nextTarget.longitude){
+
+                            // drone has reached targ
+                            onTargetReached();
+                        }
+
+                    } else {
+                        //console.log("In recalculatePath(): drone is moving down..");
+
+                        // drone moving left and down
+
+                        if(droneImage.coordinate.latitude > droneImage.nextTarget.latitude && droneImage.coordinate.longitude < droneImage.nextTarget.longitude){
+
+                            // drone has reached targ
+                            onTargetReached();
+                        }
+
+                    }
+                }
+            */
+
+            if(Math.abs(droneImage.coordinate.latitude - droneImage.nextTarget.latitude) < 0.001){
+                //console.log("latitude delta is less than 10^-4 !!!!");
+                if(Math.abs(droneImage.coordinate.longitude - droneImage.nextTarget.longitude) < 0.001){
+                    //console.log("longitude delta "+(droneImage.coordinate.longitude - droneImage.nextTarget.longitude)+" is less than 10^-4 !!!!");
+                    onTargetReached();
+                } else {
+                    //console.log("longitude delta is still larger than 10^-4");
+
+                }
+
+            } else {
+                //console.log("latitude delta: "+ (droneImage.coordinate.latitude - droneImage.nextTarget.latitude) + " still larger than 10^-4");
+            }
+        }
+
+        //map.addMapItem(polyline);
     }
 
     function addGeoItem(item)
@@ -185,6 +401,22 @@ Map {
 
         } else {
             console.log(item + " is not supported right now, please call us later.")
+        }
+    }
+
+    function addChemicalRadius(radius, color)
+    {
+        console.log("in addChemicalRadius with radius="+radius + " and color=" + color);
+        var count = map.mapItems.length
+        var co = Qt.createComponent('CircleItem.qml')
+        if (co.status == Component.Ready) {
+            var o = co.createObject(map)
+            //o.setGeometry(map.markers, currentMarker)
+            o.setGeometryForChemical(mouseArea.lastCoordinate, radius, color);
+            map.addMapItem(o)
+
+        } else {
+            console.log(coord + " is not supported right now, please call us later.")
         }
     }
 
@@ -295,9 +527,32 @@ Map {
         scaleTimer.restart()
     }
 
+
+    Timer {
+        property int recalculateCounter: 0
+        interval: 100; running: true; repeat: true
+        onTriggered: {
+            recalculateCounter++;
+            if(recalculateCounter % 5 == 0){
+                recalculatePath();
+            }
+
+            droneImage.move();
+        }
+    }
+
     Component.onCompleted: {
         markers = new Array();
         mapItems = new Array();
+        var droneImageCo = Qt.createComponent('Drone.qml')
+        if (droneImageCo.status == Component.Ready) {
+            droneImage = droneImageCo.createObject(map)
+            droneImage.setGeometry(map.center);
+            map.addMapItem(droneImage)
+
+        } else {
+            console.log("Drone.qml not supported right now, please call us later.")
+        }
     }
 
     Keys.onPressed: {
@@ -364,6 +619,28 @@ Map {
         anchorPoint: Qt.point(-poiTheQtComapny.sourceItem.width * 0.5,poiTheQtComapny.sourceItem.height * 1.5)
     }
 
+    /*
+        Map {
+            MapPolyline {
+                line.width: 3
+                line.color: 'green'
+                path: [
+                    { latitude: -27, longitude: 153.0 },
+                    { latitude: -27, longitude: 154.1 },
+                    { latitude: -28, longitude: 153.5 },
+                    { latitude: -29, longitude: 153.5 }
+                ]
+            }
+        }
+    */
+
+
+    MapPolyline {
+        id: polyline
+        line.width: 3
+        line.color: 'green'
+        path: []
+    }
 
     Slider {
         id: zoomSlider;
