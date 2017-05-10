@@ -31,12 +31,13 @@
 #include<QObject>
 #include<QElapsedTimer>
 #include<QVideoFrame>
+#include<QUdpSocket>
 
-#include<opencv2/highgui/highgui.hpp>
-#include<opencv2/videoio/videoio_c.h>
-#include<opencv2/imgproc/imgproc.hpp>
-#include<opencv2/imgproc/types_c.h>
-#include<opencv2/objdetect.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/videoio/videoio_c.h>
+#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgproc/types_c.h>
+#include <opencv2/objdetect.hpp>
 
 #include<vector>
 #include<iostream>
@@ -72,12 +73,14 @@ public:
         BetterVideoCapture* camera, 
         QVideoFrame* videoFrame, 
         unsigned char* cvImageBuf, 
-        int width, int height, 
+        int width, 
+        int height, 
         int * brightness, 
         float * contrast, 
         bool * objectDetectionActive, 
         bool * licenseDetectionActive,
-        bool * eyesDetectionActive
+        bool * eyesDetectionActive,
+        bool * rosCameraActive
     );
 
     /**
@@ -98,9 +101,11 @@ private:
 #endif
     int * brightness; 
     float * contrast;
+    QUdpSocket * rosCameraSocket = NULL;
     bool * objectDetectionActive;
     bool * licenseDetectionActive;
     bool * eyesDetectionActive;
+    bool * rosCameraActive;
     int width;                                  ///< Width of the camera image
     int height;                                 ///< Height of the camera image
     BetterVideoCapture* camera;                 ///< The camera to get data from
@@ -123,13 +128,59 @@ public slots:
      * @brief Continuously gets data from the camera
      */
     void doWork();
-
 signals:
 
     /**
      * @brief Emitted when image from a new frame is ready
      */
 void imageReady();
+};
+
+
+
+class ROSCameraTask : public QObject{
+Q_OBJECT
+
+public:
+
+    ROSCameraTask(
+        QVideoFrame* videoFrame, 
+        unsigned char* cvImageBuf, 
+        int width, 
+        int height, 
+        int * brightness, 
+        float * contrast,
+        bool * objectDetectionActive, 
+        bool * licenseDetectionActive,
+        bool * eyesDetectionActive,
+        bool * rosCameraActive
+    );
+
+    void stop();
+
+
+private:
+    int * brightness; 
+    float * contrast;
+    QUdpSocket * rosCameraSocket = NULL;
+    bool * objectDetectionActive;
+    bool * licenseDetectionActive;
+    bool * eyesDetectionActive;
+    bool * rosCameraActive;
+    int width;                                  ///< Width of the camera image
+    int height;                                 ///< Height of the camera image
+    BetterVideoCapture* camera;                 ///< The camera to get data from
+    bool running = false;                       ///< Whether the worker thread is running
+    QVideoFrame* videoFrame;                    ///< Place to draw camera image to
+    unsigned char* cvImageBuf;          
+
+public slots:
+    
+    void doWork();
+
+
+signals:
+    void imageReady();
 };
 
 /**
@@ -157,7 +208,8 @@ public:
         float * contrast, 
         bool * objectDetectionActive, 
         bool * licenseDetectionActive,
-        bool * eyesDetectionActive
+        bool * eyesDetectionActive,
+        bool * rosCameraActive
     );
 
     /**
@@ -176,9 +228,12 @@ public:
     void stop();
 
 private:
+    bool * rosCameraActive;
 
-    QThread workerThread;               ///< The thread that the camera will work in
+    QThread workerThread;   
+    QThread rosCameraThread;               ///< The thread that the camera will work in
     CameraTask* task = NULL;            ///< The camera loop method and parameter container
+    ROSCameraTask* rosTask = NULL;
 
 signals:
 
@@ -188,5 +243,5 @@ signals:
     void imageReady();
 };
 
-#endif /* CAMERATHREAD_H */
 
+#endif /* CAMERATHREAD_H */

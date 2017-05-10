@@ -25,8 +25,6 @@
 
 #include"CVCamera.h"
 
-#include "pthread.h"
-
 CVCamera::CVCamera(QQuickItem* parent) :
     QQuickItem(parent)
 {
@@ -40,8 +38,18 @@ CVCamera::CVCamera(QQuickItem* parent) :
         deviceList << device;
     }
     emit deviceListChanged();
+    if(this->rosCameraActive)
+    {
+        std::cout << "in CVCamera::CVCamera()... rosCameraActive is TRUE!\n";
+        size = QSize(320,240);
 
-    size = QSize(640,480);
+    }
+    else
+    {
+        std::cout << "in CVCamera::CVCamera()... rosCameraActive is FALSE!\n";
+        size = QSize(640,480);
+
+    }
     connect(this, &QQuickItem::parentChanged, this, &CVCamera::changeParent);
 
     //Open camera right away
@@ -130,6 +138,7 @@ void CVCamera::allocateVideoFrame()
 
 void CVCamera::update()
 {
+    printf("Opening camera %d, width: %d, height: %d", device, size.width(), size.height());
     DPRINT("Opening camera %d, width: %d, height: %d", device, size.width(), size.height());
 
     //Destroy old thread, camera accessor and buffers
@@ -157,7 +166,8 @@ void CVCamera::update()
         &(this->contrast), 
         &(this->objectDetectionActive),
         &(this->licenseDetectionActive),
-        &(this->eyesDetectionActive)
+        &(this->eyesDetectionActive),
+        &(this->rosCameraActive)
         );
     connect(thread,SIGNAL(imageReady()), this, SLOT(imageReceived()));
 
@@ -185,12 +195,27 @@ void CVCamera::update()
 
 void CVCamera::imageReceived()
 {
+    std::cout << "in CVCamera::imageReceived()...\n";
     //Update VideoOutput
     if(videoSurface)
+    {
+        std::cout << "in CVCamera::imageReceived(), videoSurface is NOT NULL\n";
         if(!videoSurface->present(*videoFrame))
+        {
+            std::cout << "in CVCamera::imageReceived(), Some error in videoSurface->present(*videoFrame)\n";
             DPRINT("Could not present QVideoFrame to QAbstractVideoSurface, error: %d",videoSurface->error());
+        }
+        else
+        {
+            std::cout << "in CVCamera::imageReceived(), videoSurface->present(*videoFrame) was successful\n";
 
+        }
+    }
+    else
+    {
+        std::cout << "in CVCamera::imageReceived(), videoSurface is NULL\n";
 
+    }
 
     //Update exported CV image
     if(exportCvImage){
@@ -238,4 +263,9 @@ void CVCamera::toggleBodyDetection()
 void CVCamera::toggleEyesDetection()
 {
     this->eyesDetectionActive = !this->eyesDetectionActive;
+}
+// /
+void CVCamera::toggleROSCamera()
+{
+    this->rosCameraActive = !this->rosCameraActive;
 }

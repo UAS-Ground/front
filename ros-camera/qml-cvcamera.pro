@@ -27,7 +27,9 @@ SOURCES += \
     src/CameraThread.cpp \
     src/BetterVideoCapture.cpp
 
-LIBS += -L/home/tyler/OpenCV/platforms/build-android/lib/armeabi-v7a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_objdetect
+LIBS += -lboost_system -lboost_thread
+
+LIBS += -L/home/tyler/OpenCV/platforms/build-desktop/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_objdetect
 
 android {
     HEADERS += \

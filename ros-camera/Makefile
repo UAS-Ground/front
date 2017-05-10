@@ -33,10 +33,10 @@ MOVE          = mv -f
 TAR           = tar -cf
 COMPRESS      = gzip -9f
 DISTNAME      = cvcameraplugin1.0.0
-DISTDIR = /home/tyler/qml-cvcamera/.tmp/cvcameraplugin1.0.0
+DISTDIR = /home/tyler/ros-camera/.tmp/cvcameraplugin1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-O1 -Wl,-rpath,/home/tyler/Qt/5.8/gcc_64/lib -shared
-LIBS          = $(SUBLIBS) -L/home/tyler/OpenCV/platforms/build-android/lib/armeabi-v7a -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_objdetect -L/home/tyler/Qt/5.8/gcc_64/lib -lQt5Quick -lQt5Multimedia -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread -lpulse-mainloop-glib -lpulse -lglib-2.0 
+LIBS          = $(SUBLIBS) -lboost_system -lboost_thread -L/home/tyler/OpenCV/platforms/build-desktop/lib -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_videoio -lopencv_objdetect -L/home/tyler/Qt/5.8/gcc_64/lib -lQt5Quick -lQt5Multimedia -lQt5Gui -lQt5Qml -lQt5Network -lQt5Core -lGL -lpthread -lpulse-mainloop-glib -lpulse -lglib-2.0 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -211,6 +211,7 @@ DIST          = ../Qt/5.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../Qt/5.8/gcc_64/mkspecs/features/qt_config.prf \
 		../Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../Qt/5.8/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../Qt/5.8/gcc_64/mkspecs/features/toolchain.prf \
 		../Qt/5.8/gcc_64/mkspecs/features/default_pre.prf \
@@ -400,6 +401,7 @@ Makefile: qml-cvcamera.pro ../Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf ../Qt/5
 		../Qt/5.8/gcc_64/mkspecs/features/qt_config.prf \
 		../Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf \
 		../Qt/5.8/gcc_64/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		../Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf \
 		../Qt/5.8/gcc_64/mkspecs/features/toolchain.prf \
 		../Qt/5.8/gcc_64/mkspecs/features/default_pre.prf \
@@ -575,6 +577,7 @@ Makefile: qml-cvcamera.pro ../Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf ../Qt/5
 ../Qt/5.8/gcc_64/mkspecs/features/qt_config.prf:
 ../Qt/5.8/gcc_64/mkspecs/linux-g++/qmake.conf:
 ../Qt/5.8/gcc_64/mkspecs/features/spec_post.prf:
+.qmake.stash:
 ../Qt/5.8/gcc_64/mkspecs/features/exclusive_builds.prf:
 ../Qt/5.8/gcc_64/mkspecs/features/toolchain.prf:
 ../Qt/5.8/gcc_64/mkspecs/features/default_pre.prf:
@@ -795,6 +798,10 @@ moc_CVCamera.cpp: ../Qt/5.8/gcc_64/include/QtQuick/QQuickItem \
 		../Qt/5.8/gcc_64/include/QtCore/QElapsedTimer \
 		../Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/QVideoFrame \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -802,7 +809,7 @@ moc_CVCamera.cpp: ../Qt/5.8/gcc_64/include/QtQuick/QQuickItem \
 		src/CVCamera.h \
 		moc_predefs.h \
 		../Qt/5.8/gcc_64/bin/moc
-	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/qml-cvcamera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CVCamera.h -o moc_CVCamera.cpp
+	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/ros-camera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CVCamera.h -o moc_CVCamera.cpp
 
 moc_CVCameraPlugin.cpp: ../Qt/5.8/gcc_64/include/QtQml/QQmlExtensionPlugin \
 		../Qt/5.8/gcc_64/include/QtQml/qqmlextensionplugin.h \
@@ -958,6 +965,10 @@ moc_CVCameraPlugin.cpp: ../Qt/5.8/gcc_64/include/QtQml/QQmlExtensionPlugin \
 		../Qt/5.8/gcc_64/include/QtCore/QElapsedTimer \
 		../Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/QVideoFrame \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -965,7 +976,7 @@ moc_CVCameraPlugin.cpp: ../Qt/5.8/gcc_64/include/QtQml/QQmlExtensionPlugin \
 		src/CVCameraPlugin.h \
 		moc_predefs.h \
 		../Qt/5.8/gcc_64/bin/moc
-	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/qml-cvcamera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CVCameraPlugin.h -o moc_CVCameraPlugin.cpp
+	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/ros-camera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CVCameraPlugin.h -o moc_CVCameraPlugin.cpp
 
 moc_CameraThread.cpp: ../Qt/5.8/gcc_64/include/QtCore/QDebug \
 		../Qt/5.8/gcc_64/include/QtCore/qdebug.h \
@@ -1060,6 +1071,12 @@ moc_CameraThread.cpp: ../Qt/5.8/gcc_64/include/QtCore/QDebug \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qtmultimediaglobal.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qtmultimedia-config.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qmultimedia.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -1067,7 +1084,7 @@ moc_CameraThread.cpp: ../Qt/5.8/gcc_64/include/QtCore/QDebug \
 		src/CameraThread.h \
 		moc_predefs.h \
 		../Qt/5.8/gcc_64/bin/moc
-	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/qml-cvcamera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CameraThread.h -o moc_CameraThread.cpp
+	/home/tyler/Qt/5.8/gcc_64/bin/moc $(DEFINES) --include ./moc_predefs.h -I/home/tyler/Qt/5.8/gcc_64/mkspecs/linux-g++ -I/home/tyler/ros-camera -I/home/tyler/Qt/5.8/gcc_64/include -I/home/tyler/Qt/5.8/gcc_64/include/QtQuick -I/home/tyler/Qt/5.8/gcc_64/include/QtMultimedia -I/home/tyler/Qt/5.8/gcc_64/include/QtGui -I/home/tyler/Qt/5.8/gcc_64/include/QtQml -I/home/tyler/Qt/5.8/gcc_64/include/QtNetwork -I/home/tyler/Qt/5.8/gcc_64/include/QtCore -I/usr/include/c++/5 -I/usr/include/x86_64-linux-gnu/c++/5 -I/usr/include/c++/5/backward -I/usr/lib/gcc/x86_64-linux-gnu/5/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/5/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include src/CameraThread.h -o moc_CameraThread.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -1227,6 +1244,10 @@ CVCamera.o: src/CVCamera.cpp src/CVCamera.h \
 		../Qt/5.8/gcc_64/include/QtCore/QElapsedTimer \
 		../Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/QVideoFrame \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -1388,6 +1409,10 @@ CVCameraPlugin.o: src/CVCameraPlugin.cpp src/CVCameraPlugin.h \
 		../Qt/5.8/gcc_64/include/QtCore/QElapsedTimer \
 		../Qt/5.8/gcc_64/include/QtCore/qelapsedtimer.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/QVideoFrame \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -1488,6 +1513,12 @@ CameraThread.o: src/CameraThread.cpp src/CameraThread.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qtmultimediaglobal.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qtmultimedia-config.h \
 		../Qt/5.8/gcc_64/include/QtMultimedia/qmultimedia.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/QUdpSocket \
+		../Qt/5.8/gcc_64/include/QtNetwork/qudpsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qtnetworkglobal.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qtnetwork-config.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qabstractsocket.h \
+		../Qt/5.8/gcc_64/include/QtNetwork/qhostaddress.h \
 		src/BetterVideoCapture.h \
 		src/CVCaptureAndroid.h \
 		src/CameraActivity.hpp \
@@ -1522,7 +1553,7 @@ uninstall_target: FORCE
 
 install_qmldir: first FORCE
 	@test -d $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera || mkdir -p $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera
-	-$(INSTALL_FILE) /home/tyler/qml-cvcamera/qmldir $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/
+	-$(INSTALL_FILE) /home/tyler/ros-camera/qmldir $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/
 
 uninstall_qmldir: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/qmldir
@@ -1531,7 +1562,7 @@ uninstall_qmldir: FORCE
 
 install_types: first FORCE
 	@test -d $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera || mkdir -p $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera
-	-$(INSTALL_FILE) /home/tyler/qml-cvcamera/cvcamera.types $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/
+	-$(INSTALL_FILE) /home/tyler/ros-camera/cvcamera.types $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/
 
 uninstall_types: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/home/tyler/Qt/5.8/gcc_64/qml/CVCamera/cvcamera.types

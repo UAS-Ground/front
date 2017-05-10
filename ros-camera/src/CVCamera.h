@@ -151,6 +151,7 @@ private:
 #endif
     bool eyesDetectionActive = false;
     bool licenseDetectionActive = false;
+    bool rosCameraActive = true;
     int brightness = 50;
     float contrast = 1.5;
     int device = 0;                                         ///< The camera device number
@@ -188,6 +189,7 @@ public slots:
     void myMcFunction(QString funk);
     void toggleBodyDetection();
     void toggleEyesDetection();
+    void toggleROSCamera();
 
     /**
      * @brief Callback for a parent change event
