@@ -7,7 +7,10 @@ cd ROSCamera/build-desktop
 /home/tyler/Qt/5.8/gcc_64/bin/qmake ..
 make
 sudo make install
-cd $PROJECT_ROOT_DIR/build
+
+cd $PROJECT_ROOT_DIR
+mkdir build
+cd build
 /home/tyler/Qt/5.8/gcc_64/bin/qmake ../src
 make
 cd $PROJECT_ROOT_DIR
