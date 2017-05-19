@@ -50,10 +50,11 @@ Enter your password and confirm installation when prompted
 
 Follow instructions at [ROS Kinetic Ubuntu installation page](http://wiki.ros.org/kinetic/Installation/Ubuntu)
 
-#### Install Google Protocol Buffers
+#### Install Google Protocol Buffers 2.6.1
 
 #### Install Boost
 
 #### Install OpenCV
 
 #### Install Qt 5.8
+
