@@ -9,7 +9,7 @@ echo "UAS Installation: OpenCV dependencies complete"
 git clone https://github.com/opencv/opencv.git
 mv opencv OpenCV
 cd OpenCV/platforms
-if [-d build-desktop]
+if [ -d build-desktop ]
 	then
 		rm -rf build-desktop
 fi

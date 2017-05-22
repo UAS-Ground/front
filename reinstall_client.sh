@@ -3,7 +3,7 @@
 
 sudo echo "Root permission obtained..."
 PROJECT_ROOT_DIR=$(pwd)
-if [-d ROSCamera/build-desktop]
+if [ -d ROSCamera/build-desktop ]
 	then 
 		cd ROSCamera/build-desktop
 else
@@ -16,7 +16,7 @@ make
 sudo make install
 
 cd $PROJECT_ROOT_DIR
-if [-d build-desktop]
+if [ -d build-desktop ]
 	then
 		rm -rf build-desktop
 fi
