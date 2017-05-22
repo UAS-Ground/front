@@ -56,5 +56,5 @@ Follow instructions at [ROS Kinetic Ubuntu installation page](http://wiki.ros.or
 
 #### Install OpenCV
 
-#### Install Qt 5.8
+#### Install Qt 5.8 Open Source
 

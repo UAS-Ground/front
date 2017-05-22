@@ -104,9 +104,9 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 
-OPENCV_PATH = /home/tyler/OpenCV
+OPENCV_PATH = $$HOME/OpenCV
 
-LIBS_PATH = /home/tyler/OpenCV/build/lib
+LIBS_PATH = $$HOME/OpenCV/build/lib
 
 PROTO_LIB_PATH = /usr/local/lib
 
@@ -127,7 +127,7 @@ INCLUDEPATH +=     $$OPENCV_PATH/modules/core/include/ \ #core module
     $$OPENCV_PATH/modules/objdetect/include/ \ #objdetect
     $$OPENCV_PATH/modules/imgproc/include/ \ #objdetect
 
-#/home/tyler/OpenCV/modules/imgproc/include
+#$$HOME/OpenCV/modules/imgproc/include
 
 #target.path = /home/tyler/NEW_UAV
 #INSTALLS += target
