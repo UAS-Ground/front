@@ -178,18 +178,18 @@ chmod +x qt-unified-linux-x64-online.run
       * [OpenCV tutorials](http://docs.opencv.org/2.4/doc/tutorials/tutorials.html)
 
   3. UAV and Server-side logic
-    * After successfully installing the [uav-command-control](https://github.com/UAS-Ground/uav-command-control.git) project, a custom fork of the [hector_quadrotor](https://github.com/tu-darmstadt-ros-pkg/hector_quadrotor) project will be created in your home directory. This project is very large, and is a good source to understand how to use a large range of the ROS functions. However the modules build by the CSULA team are located in the 'groundsystem_communication' package located in the `src/hector_quadrotor` directory
+    * After successfully installing the [uav-command-control](https://github.com/UAS-Ground/uav-command-control.git) project, a custom fork of the [hector_quadrotor](https://github.com/tu-darmstadt-ros-pkg/hector_quadrotor) project will be created in your home directory. This project is very large, and is a good source to understand how to use a large range of the ROS functions. However, the modules built by the CSULA team are located in the 'groundsystem_communication' package located in the `src/hector_quadrotor` directory
     * Any changes made to the code inside the ROS package must be built before they can be tested
 
     ```bash
-    # After saving all code changes, go to project root
-    cd $HOME/hector_quadrotor
-    # Build project
-    catkin_make
-    # Run setup script to configure environment (usually not necessary if you have appended the following line into your '.bashrc' file, which should have been done by shell script install.sh)
-    source devel/setup.bash
-    # Run demo
-    roslaunch groundsystem_communication groundsystem_demo.launch
+      # After saving all code changes, go to project root
+      cd $HOME/hector_quadrotor
+      # Build project
+      catkin_make
+      # Run setup script to configure environment (usually not necessary if you have appended the following line into your '.bashrc' file, which should have been done by shell script install.sh)
+      source devel/setup.bash
+      # Run demo
+      roslaunch groundsystem_communication groundsystem_demo.launch
     ```
 
     * Useful references
