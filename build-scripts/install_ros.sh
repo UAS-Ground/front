@@ -9,4 +9,6 @@ rosdep update
 echo "source /opt/ros/kinetic/setup.bash" >> ~/.bashrc
 source ~/.bashrc
 sudo apt-get -y install python-rosinstall
-
+sudo apt-get -y install ros-kinetic-geographic-msgs ros-kinetic-hardware-interface ros-kinetic-controller-interface
+sudo apt-get -y install ros-kinetic-move-base-msgs
+sudo apt-get -y install ros-kinetic-gazebo-ros-control 
