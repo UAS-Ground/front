@@ -30,15 +30,18 @@ cd $HOME
 ```bash
 git clone https://github.com/UAS-Ground/front
 ```
-#### Navigate to UAS Ground System root directory
+#### Navigate to UAS Ground System client root directory
 ```bash
-cd ground-system
+cd front
 ```
 
 #### Execute install script
 ```bash
-chmod +x install.sh
-./install.sh
+# Give execute permissions, if necessary, then run scripts
+chmod +x install_dependencies.sh
+./install_dependencies.sh
+chmod +x reinstall_client.sh
+./reinstall_client.sh
 ```
 ---
 
