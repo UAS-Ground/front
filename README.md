@@ -181,27 +181,27 @@ chmod +x qt-unified-linux-x64-online.run
     * After successfully installing the [uav-command-control](https://github.com/UAS-Ground/uav-command-control.git) project, a custom fork of the [hector_quadrotor](https://github.com/tu-darmstadt-ros-pkg/hector_quadrotor) project will be created in your home directory. This project is very large, and is a good source to understand how to use a large range of the ROS functions. However, the modules built by the CSULA team are located in the 'groundsystem_communication' package located in the `src/hector_quadrotor` directory
     * Any changes made to the code inside the ROS package must be built before they can be tested
 
-    ```bash
-      # After saving all code changes, go to project root
-      cd $HOME/hector_quadrotor
-      # Build project
-      catkin_make
-      # Run setup script to configure environment (usually not necessary if you have appended the following line into your '.bashrc' file, which should have been done by shell script install.sh)
-      source devel/setup.bash
-      # Run demo
-      roslaunch groundsystem_communication groundsystem_demo.launch
-    ```
+  ```bash
+    # After saving all code changes, go to project root
+    cd $HOME/hector_quadrotor
+    # Build project
+    catkin_make
+    # Run setup script to configure environment (usually not necessary if you have appended the following line into your '.bashrc' file, which should have been done by shell script install.sh)
+    source devel/setup.bash
+    # Run demo
+    roslaunch groundsystem_communication groundsystem_demo.launch
+  ```
 
-    * Useful references
-      * CSULA student developer Maria Perez has compiled notes and tutorials in her [GitHub repository](https://github.com/mperez13/ROS-Tutorials)
-      * Tutorials on [ros.org](http://www.ros.org):
-	  * [Publisher and subscriber](http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber)
-      * [actionlib tutorials](http://wiki.ros.org/actionlib/Tutorials)
-      * The groundsystem_communication package uses the following packages to achieve server functionality:
-        * [boost::asio](http://www.boost.org/doc/libs/1_64_0/doc/html/boost_asio/tutorial.html) for sending video frames and receiving commands
-        * cv_bridge for translating ROS image frames to OpenCV matrices
-        * [protobuf](https://developers.google.com/protocol-buffers/docs/cpptutorial) for deserializing received commands
-        * [OpenCV's imgproc and imgcodecs](http://docs.opencv.org/3.0-beta/modules/imgcodecs/doc/reading_and_writing_images.html) for compressing camera frames
+  * Useful references
+    * CSULA student developer Maria Perez has compiled notes and tutorials in her [GitHub repository](https://github.com/mperez13/ROS-Tutorials)
+    * Tutorials on [ros.org](http://www.ros.org):
+  * [Publisher and subscriber](http://wiki.ros.org/ROS/Tutorials/WritingPublisherSubscriber)
+    * [actionlib tutorials](http://wiki.ros.org/actionlib/Tutorials)
+    * The groundsystem_communication package uses the following packages to achieve server functionality:
+      * [boost::asio](http://www.boost.org/doc/libs/1_64_0/doc/html/boost_asio/tutorial.html) for sending video frames and receiving commands
+      * cv_bridge for translating ROS image frames to OpenCV matrices
+      * [protobuf](https://developers.google.com/protocol-buffers/docs/cpptutorial) for deserializing received commands
+      * [OpenCV's imgproc and imgcodecs](http://docs.opencv.org/3.0-beta/modules/imgcodecs/doc/reading_and_writing_images.html) for compressing camera frames
 
   4. Additional resources
   Many of our early challenges on this project were due to understanding the build/compile processes and tools for command-line and the general C++ workflow. 
